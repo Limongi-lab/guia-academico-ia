@@ -1,0 +1,119 @@
+[
+    {
+        "id": "ufu-normas-gerais-graduacao",
+        "instituicao": "ufu",
+        "titulo": "Normas Gerais da Graduação (Res. CONGRAD 46/2022)",
+        "url": "http://www.reitoria.ufu.br/Resolucoes/ataCONGRAD-2022-46.pdf",
+        "tipo": "pdf",
+        "data_ref": "2024-04-18",
+        "prioridade": 1
+    },
+    {
+        "id": "ufu-normas-estagio",
+        "instituicao": "ufu",
+        "titulo": "Normas Gerais de Estágio (Res. CONGRAD 93/2023)",
+        "url": "http://www.reitoria.ufu.br/Resolucoes/ataCONGRAD-2023-93.pdf",
+        "tipo": "pdf",
+        "data_ref": "2023",
+        "prioridade": 1
+    },
+    {
+        "id": "fagen-gi-atividades-complementares",
+        "instituicao": "ufu",
+        "titulo": "Atividades Complementares - Gestão da Informação (página FAGEN)",
+        "url": "https://fagen.ufu.br/servicos/atividades-complementares-1",
+        "tipo": "html",
+        "data_ref": "2023-05-26",
+        "prioridade": 1
+    },
+    {
+        "id": "fagen-gi-atividades-complementares-2015",
+        "instituicao": "ufu",
+        "titulo": "Atividades Complementares - quadro FAGEN (PDF 2015)",
+        "url": "https://www.fagen.ufu.br/system/files/conteudo/atividadescomplementares_revisado_em_12-02-2015_0.pdf",
+        "tipo": "pdf",
+        "data_ref": "2015-02-12",
+        "prioridade": 2
+    },
+    {
+        "id": "fagen-gi-tcc",
+        "instituicao": "ufu",
+        "titulo": "TCC - Gestão da Informação (GGI 095)",
+        "url": "https://fagen.ufu.br/servicos/trabalho-de-conclusao-de-curso-0",
+        "tipo": "html",
+        "data_ref": "2026-06-02",
+        "prioridade": 1
+    },
+    {
+        "id": "fagen-gi-estagio",
+        "instituicao": "ufu",
+        "titulo": "Estágio Supervisionado - Gestão da Informação (página FAGEN)",
+        "url": "https://fagen.ufu.br/servicos/estagio-supervisionado",
+        "tipo": "html",
+        "data_ref": null,
+        "prioridade": 1
+    },
+    {
+        "id": "fagen-gi-ppc",
+        "instituicao": "ufu",
+        "titulo": "Projeto Pedagógico - Gestão da Informação",
+        "url": "https://fagen.ufu.br/graduacao/graduacao-modalidade-presencial/gestao-da-informacao/projeto-pedagogico",
+        "tipo": "html",
+        "data_ref": null,
+        "prioridade": 1
+    },
+    {
+        "id": "uniube-regimento-geral-2015",
+        "instituicao": "uniube",
+        "titulo": "Regimento Geral da Universidade de Uberaba (dez/2015)",
+        "url": "https://uniube.br/arquivos/2016/marco/regimento_geral_2013_c_alteracoes_sist_avaliacao_dez_2015.pdf",
+        "tipo": "pdf",
+        "data_ref": "2015-12",
+        "prioridade": 2
+    },
+    {
+        "id": "uniube-piac-pagina",
+        "instituicao": "uniube",
+        "titulo": "PIAC - Programa Institucional de Atividades Complementares",
+        "url": "https://uniube.br/academico/programas/piac",
+        "tipo": "html",
+        "data_ref": null,
+        "prioridade": 1
+    },
+    {
+        "id": "uniube-piac-tabela-2023",
+        "instituicao": "uniube",
+        "titulo": "PIAC - Tabela de atividades e créditos (presencial, 2023)",
+        "url": "https://uniube.br/arquivos/2023/maio/tabela-ativ-comp-piac-modificada-atual-em-horas-2023-1.pdf",
+        "tipo": "pdf",
+        "data_ref": "2023-05",
+        "prioridade": 1
+    },
+    {
+        "id": "uniube-proest-pagina",
+        "instituicao": "uniube",
+        "titulo": "PROEST - Programa de Estágio",
+        "url": "https://uniube.br/academico/programas/proest",
+        "tipo": "html",
+        "data_ref": null,
+        "prioridade": 1
+    },
+    {
+        "id": "uniube-estagio-normas",
+        "instituicao": "uniube",
+        "titulo": "Normas e Procedimentos de estágio",
+        "url": "https://uniube.br/institucional/conteudo/150/100",
+        "tipo": "html",
+        "data_ref": null,
+        "prioridade": 1
+    },
+    {
+        "id": "uniube-calendario-2026-presencial",
+        "instituicao": "uniube",
+        "titulo": "Calendário acadêmico 2026 (presencial)",
+        "url": "https://uniube.br/arquivos/2025/dezembro/calendario-2026-unificado-presencial.pdf",
+        "tipo": "pdf",
+        "data_ref": "2026",
+        "prioridade": 1
+    }
+]
