@@ -20,6 +20,7 @@ DOCUMENTOS = [
 ]
 MARCAS = ("(Redação dada", "(Revogado", "(Incluído", "(Vide", "SEI/UFU", "sei.ufu.br")
 TITULO_COLADO = re.compile(r"^\s*(t[íi]tulo|cap[íi]tulo|se[çc][ãa]o|subse[çc][ãa]o)\b", re.I | re.M)
+TITULO_CAIXA_ALTA = re.compile(r"^\s*D[OA]S?\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ ,]{6,}$", re.M)
 
 
 def numero(artigo: str) -> int | None:
@@ -41,7 +42,11 @@ def checar(doc_id: str, trechos: list[dict]) -> None:
     residuais = [t["artigo"] for t in trechos if any(m in t["texto"] for m in MARCAS)]
     print(f"   com marcação residual: {residuais[:20] or 'nenhum'}")
 
-    coladas = [t["artigo"] for t in trechos if TITULO_COLADO.search(t["texto"][-300:])]
+    coladas = [
+        t["artigo"]
+        for t in trechos
+        if TITULO_COLADO.search(t["texto"][-300:]) or TITULO_CAIXA_ALTA.search(t["texto"][-300:])
+    ]
     print(f"   com título/capítulo colado no fim: {coladas[:20] or 'nenhum'} (total {len(coladas)})")
 
     por_tamanho = sorted(trechos, key=lambda t: len(t["texto"]))
@@ -53,6 +58,7 @@ def checar(doc_id: str, trechos: list[dict]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--doc", default="ufu-normas-gerais-graduacao", help="documento do --mostrar")
     parser.add_argument("--mostrar", nargs="*", default=[], help="artigos para imprimir")
     args = parser.parse_args()
 
@@ -84,7 +90,7 @@ def main() -> None:
             for r in registros:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-        if doc_id == "ufu-normas-gerais-graduacao":
+        if doc_id == args.doc:
             for r in registros:
                 if r["artigo"] in args.mostrar:
                     print(f"\n--- Art. {r['artigo']} (páginas {r['paginas']})\n{r['texto']}")

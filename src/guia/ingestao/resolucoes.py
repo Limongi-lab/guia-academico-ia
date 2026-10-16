@@ -45,9 +45,13 @@ _SEI_PATTERNS = [
 # O lookahead (?=\s) exige espaço/quebra após o terminador — evita citações falsas.
 # Grupo 1 captura apenas os dígitos; ordinal e ponto são consumidos mas descartados.
 _ARTIGO_RE = re.compile(
-    r'^Art\.?\s+(\d+)(?:(?:º|o)\.?|\.(?=\s)|\s+(?=[A-ZÁÀÂÃÉÊÍÓÔÕÚÜÇ]))',
+    r'^[ \t]*Art\.?\s+(\d+)(?:(?:º|o)\.?|\.(?=\s)|\s+(?=[A-ZÁÀÂÃÉÊÍÓÔÕÚÜÇ]))',
     re.MULTILINE,
 )
+
+# Aspas de fechamento após ponto que delimitam o corpo do último artigo
+# (ex.: '.".' ou '."' em citações legislativas como '"Art. 216 ...".').
+_CAUDA_RE = re.compile(r'\.["\u201c\u201d]\.?\s*$', re.MULTILINE)
 
 # Títulos estruturais (CAPÍTULO, TÍTULO, SEÇÃO, SUBSEÇÃO em qualquer caixa)
 # e a linha de nome que os segue. São removidos do artigo anterior e viram
@@ -106,10 +110,11 @@ def _extrair_resolucoes(texto: str) -> list[str]:
 def _limpar_marcacoes(texto: str) -> str:
     """Remove marcações (Redação dada...), (Revogado...), (Incluído...) do texto.
 
-    re.DOTALL + re.IGNORECASE já estão no _MARCA_RE compilado, portanto
-    marcações partidas em múltiplas linhas e variações de caixa são tratadas.
+    Marcadores de página são removidos antes de aplicar o regex para que
+    marcações partidas entre páginas sejam reconhecidas integralmente.
+    re.DOTALL + re.IGNORECASE já estão no _MARCA_RE compilado.
     """
-    return _MARCA_RE.sub('', texto)
+    return _MARCA_RE.sub('', _PAG_RE.sub('', texto))
 
 
 # ---------------------------------------------------------------------------
@@ -163,12 +168,18 @@ class _Unidade(NamedTuple):
 # ---------------------------------------------------------------------------
 
 def _tipo_alteracao(texto: str) -> tuple[str, list[str]]:
-    """Detecta o tipo de alteração e as resoluções citadas num bloco de texto."""
-    m = _MARCA_RE.search(texto)
+    """Detecta o tipo de alteração e as resoluções citadas num bloco de texto.
+
+    Marcadores de página são removidos antes da busca para que marcações
+    partidas entre páginas sejam detectadas (os marcadores não contêm ')',
+    mas interrompem os \\s+ que ligam as palavras da marcação).
+    """
+    texto_s = _PAG_RE.sub('', texto)
+    m = _MARCA_RE.search(texto_s)
     if not m:
         return '', []
     tipo = m.group(1)
-    resols = _extrair_resolucoes(texto)
+    resols = _extrair_resolucoes(texto_s)
     return tipo, resols
 
 
@@ -325,6 +336,9 @@ def dividir_em_artigos(texto: str) -> list[dict]:
     # 1. Remover cabeçalho/rodapé/contadores do SEI antes de qualquer análise.
     #    O contador "46/52" é removido aqui para não partir marcações de alteração.
     texto = _remover_sei(texto)
+    # 2. Normalizar espaço inseparável (U+00A0) → espaço comum antes de qualquer
+    #    regex, para que linhas como " \u00a0Art. 18. Texto" sejam reconhecidas.
+    texto = texto.replace('\u00a0', ' ')
 
     pagina_corrente = 1
     artigos_vistos: dict[str, dict] = {}
@@ -405,4 +419,25 @@ def dividir_em_artigos(texto: str) -> list[dict]:
                 # Seção/Subseção: mantém o capítulo, atualiza seção
                 secao_corrente = titulo_encontrado
 
-    return list(artigos_vistos.values())
+    artigos = list(artigos_vistos.values())
+    # Truncar cauda do ÚLTIMO artigo: remove texto posterior à primeira linha
+    # que termina com aspas de fechamento após ponto ('.".' ou '."'),
+    # descartando a resolução de aprovação, assinaturas e referências de processo.
+    if artigos:
+        ultimo = artigos[-1]
+        artigos[-1] = {**ultimo, 'texto': _truncar_cauda(ultimo['texto'])}
+    return artigos
+
+
+def _truncar_cauda(texto: str) -> str:
+    """Remove a cauda após o corpo do último artigo.
+
+    Encontra a primeira linha que termina com aspas de fechamento após ponto
+    ('.".', '."', '.".', '."'), mantém o ponto e descarta o restante.
+    Se nenhuma linha terminar assim, devolve o texto intacto.
+    """
+    m = _CAUDA_RE.search(texto)
+    if not m:
+        return texto
+    # m.start() aponta para o '.' antes das aspas; +1 inclui o ponto e exclui as aspas.
+    return texto[:m.start() + 1].rstrip()

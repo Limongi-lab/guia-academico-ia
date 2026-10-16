@@ -272,3 +272,86 @@ def test_citacao_no_inicio_da_linha_nao_vira_artigo():
     trechos = dividir_em_artigos(TEXTO_CITACAO_NO_INICIO_DA_LINHA)
     assert [t["artigo"] for t in trechos] == ["12", "13"]
     assert "Art. 18 desta Norma" in normalizar(trechos[0]["texto"])
+
+TEXTO_NBSP = (
+    "=== página 8 ===\n"
+    "Art. 17. O currículo poderá ser alterado nos seguintes casos:\n"
+    "§ 2º A documentação será definida pela PROGRAD.\n"
+    " \u00a0Art. 18. O currículo poderá ser alterado com parecer da PROGRAD, nos seguintes casos:\n"
+    "I – alteração de pré-requisitos;\n"
+    "Art. 19. A alteração dos optativos poderá ser feita pelo Colegiado.\n"
+)
+
+TEXTO_RECUO = (
+    "=== página 9 ===\n"
+    "Art. 45.  A frequência é obrigatória.\n\n"
+    "        Art. 46.  A avaliação é parte integrante do processo ensino-aprendizagem.\n\n"
+    "                § 1º  A avaliação é feita abrangendo frequência e aproveitamento.\n\n"
+    "        Art. 47.  O resultado dos pontos obtidos é apurado com o seguinte procedimento:\n"
+    "Art. 48.   A avaliação das atividades complementares é regulamentada por normas próprias.\n"
+)
+
+TEXTO_MARCACAO_ENTRE_PAGINAS = """\
+=== página 46 ===
+Art. 188. A análise da equivalência será feita pela comparação da carga horária.
+§ 3º A Coordenação poderá propor a Complementação de Estudos se: (Redação dada pela Resolução
+18/04/2024, 13:16 SEI/UFU - 5346187 - Resolução
+https://www.sei.ufu.br/sei/controlador.php?acao=documento_imprimir_web&id_documento=5967542&infra_si… 46/52
+=== página 47 ===
+18/04/2024, 13:16 SEI/UFU - 5346187 - Resolução
+CONGRAD nº 78, de 16 de novembro de 2022)
+I – faltar até 1/3 (um terço) da carga horária exigida; e/ou
+"""
+
+TEXTO_COM_CAUDA = """\
+=== página 51 ===
+Art. 215. Por caso fortuito, o estudante pode interpor recurso.
+Art. 216. Os casos omissos nesta Resolução serão resolvidos pelo CONGRAD.".
+
+Art. 2º O art. 2º da Resolução nº 05/2016, do Conselho de Graduação, passa a vigorar com
+a seguinte redação:
+“Art. 2º A Colação de Grau é ato oficial, público e obrigatório.”.
+
+Art. 3º Revoga-se a Resolução nº 15/2011, do Conselho de Graduação.
+
+Art. 4º Esta Resolução entra em vigor na data de sua publicação.
+
+VALDER STEFFEN JUNIOR
+Presidente
+
+Referência: Processo nº 23117.055414/2021-05
+SEI nº 5346187
+"""
+
+
+def test_artigo_com_nbsp_no_inicio_da_linha_e_reconhecido():
+    trechos = dividir_em_artigos(TEXTO_NBSP)
+    assert [t["artigo"] for t in trechos] == ["17", "18", "19"]
+    assert "parecer da PROGRAD" not in normalizar(trechos[0]["texto"])
+    assert "alteração de pré-requisitos" in normalizar(trechos[1]["texto"])
+
+
+def test_artigo_com_recuo_no_regimento_uniube():
+    trechos = dividir_em_artigos(TEXTO_RECUO)
+    assert [t["artigo"] for t in trechos] == ["45", "46", "47", "48"]
+    assert "A avaliação é parte integrante" not in normalizar(trechos[0]["texto"])
+    assert "A avaliação é parte integrante" in normalizar(trechos[1]["texto"])
+
+
+def test_marcacao_partida_entre_paginas_sai_inteira():
+    t = dividir_em_artigos(TEXTO_MARCACAO_ENTRE_PAGINAS)[0]
+    texto = normalizar(t["texto"])
+    assert "Redação dada" not in texto
+    assert "CONGRAD" not in texto
+    assert "faltar até 1/3" in texto
+    assert any("78" in a for a in t["alteracoes"])
+    assert t["paginas"] == [46, 47]
+
+
+def test_cauda_depois_do_ultimo_artigo_e_descartada():
+    trechos = dividir_em_artigos(TEXTO_COM_CAUDA)
+    assert [t["artigo"] for t in trechos] == ["215", "216"]
+    texto = normalizar(trechos[1]["texto"])
+    assert texto.endswith("resolvidos pelo CONGRAD.")
+    for lixo in ("Colação", "Revoga-se", "VALDER", "Referência", "SEI nº"):
+        assert lixo not in texto
