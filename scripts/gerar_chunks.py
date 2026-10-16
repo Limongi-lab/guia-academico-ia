@@ -29,6 +29,8 @@ def numero(artigo: str) -> int | None:
 
 
 def checar(doc_id: str, trechos: list[dict]) -> None:
+    for t in trechos[:3]:
+        print(f"   início: Art. {t['artigo']} -> {' '.join(t['texto'].split())[:90]}")
     nums = [numero(t["artigo"]) for t in trechos]
     validos = [n for n in nums if n is not None]
     print(f"   trechos: {len(trechos)} | maior artigo: {max(validos) if validos else '-'}")
