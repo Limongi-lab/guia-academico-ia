@@ -355,3 +355,93 @@ def test_cauda_depois_do_ultimo_artigo_e_descartada():
     assert texto.endswith("resolvidos pelo CONGRAD.")
     for lixo in ("Colação", "Revoga-se", "VALDER", "Referência", "SEI nº"):
         assert lixo not in texto
+
+TEXTO_COM_APROVACAO = """\
+=== página 1 ===
+Art. 1º Aprovar as Normas Gerais de Estágio, na forma do Anexo desta Resolução.
+Art. 2º Ficam revogadas:
+I – a Resolução nº 24/2012, do Conselho de Graduação.
+Art. 3º Esta Resolução entra em vigor na data de sua publicação.
+ANEXO
+NORMAS GERAIS DE ESTÁGIO
+Art. 1º Estas Normas disciplinam o estágio dos estudantes de graduação.
+Art. 2º O estágio é ato educativo escolar supervisionado.
+Art. 3º O estágio pode ser obrigatório ou não obrigatório.
+"""
+
+TEXTO_CITACAO_DE_ARTIGO_1 = """\
+=== página 1 ===
+Art. 1º Estas Normas disciplinam o estágio.
+Art. 2º O estágio é ato educativo.
+Art. 12. O estágio obedece à legislação, em especial ao disposto
+Art. 1º da Lei nº 11.788, de 25 de setembro de 2008, e demais exceções.
+Art. 13. Compete à Coordenação acompanhar o estágio.
+"""
+
+TEXTO_TITULO_COM_LINHA_EM_BRANCO = """\
+=== página 10 ===
+Art. 28. O ano letivo terá, no mínimo, 200 dias de trabalhos acadêmicos efetivos.
+ 
+CAPÍTULO II
+
+DO PERÍODO LETIVO ESPECIAL
+
+Art. 29. O período letivo especial destina-se ao oferecimento de componentes curriculares.
+"""
+
+TEXTO_TITULO_CAIXA_ALTA_ISOLADO = """\
+=== página 12 ===
+Art. 38. O ingresso nos cursos é feito por uma das seguintes formas.
+
+DOS EDITAIS E SUAS PARTES
+
+Art. 39. Caberá à DIRPS a responsabilidade pela elaboração dos editais.
+"""
+
+TEXTO_CAPITULO_CAIXA_MISTA = """\
+=== página 2 ===
+Art. 1º Este Regimento disciplina as atividades comuns da Universidade.
+
+Capítulo II
+
+DA ORGANIZAÇÃO DIDÁTICA
+
+Art. 2º Os cursos de graduação são organizados em currículos plenos.
+"""
+
+
+def test_preambulo_de_aprovacao_e_descartado():
+    trechos = dividir_em_artigos(TEXTO_COM_APROVACAO)
+    assert [t["artigo"] for t in trechos] == ["1", "2", "3"]
+    assert "Estas Normas disciplinam" in normalizar(trechos[0]["texto"])
+    texto2 = normalizar(trechos[1]["texto"])
+    assert "ato educativo" in texto2
+    assert "Ficam revogadas" not in texto2
+
+
+def test_citacao_de_artigo_1_no_corpo_nao_reinicia_a_contagem():
+    trechos = dividir_em_artigos(TEXTO_CITACAO_DE_ARTIGO_1)
+    assert [t["artigo"] for t in trechos] == ["1", "2", "12", "13"]
+    assert "Art. 1º da Lei nº 11.788" in normalizar(trechos[2]["texto"])
+
+
+def test_titulo_separado_do_nome_por_linha_em_branco():
+    art28, art29 = dividir_em_artigos(TEXTO_TITULO_COM_LINHA_EM_BRANCO)
+    assert "CAPÍTULO" not in art28["texto"]
+    assert "ESPECIAL" not in art28["texto"]
+    assert "CAPÍTULO II" in art29["capitulo"]
+    assert "DO PERÍODO LETIVO ESPECIAL" in art29["capitulo"]
+
+
+def test_titulo_em_caixa_alta_isolado_vira_secao():
+    art38, art39 = dividir_em_artigos(TEXTO_TITULO_CAIXA_ALTA_ISOLADO)
+    assert "DOS EDITAIS" not in art38["texto"]
+    assert "DOS EDITAIS E SUAS PARTES" in art39["secao"]
+
+
+def test_capitulo_com_caixa_mista_e_linha_em_branco():
+    art1, art2 = dividir_em_artigos(TEXTO_CAPITULO_CAIXA_MISTA)
+    assert "Capítulo" not in art1["texto"]
+    assert "DA ORGANIZAÇÃO DIDÁTICA" not in art1["texto"]
+    assert "Capítulo II" in art2["capitulo"]
+    assert "DA ORGANIZAÇÃO DIDÁTICA" in art2["capitulo"]
