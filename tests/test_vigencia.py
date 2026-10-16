@@ -156,3 +156,119 @@ def test_rodape_do_sei_sai_e_artigo_entre_paginas_guarda_as_duas(trechos):
     assert "sei.ufu.br" not in texto
     assert "trancamento parcial ou geral de matrícula" in texto
     assert t["paginas"] == [29, 30]
+
+TEXTO_ORDINAIS = """\
+=== página 1 ===
+Art. 1º Esta Norma disciplina a organização acadêmica dos cursos de graduação.
+Art. 2º Os cursos de graduação terão duração definida no Projeto Pedagógico.
+Parágrafo único. O prazo poderá ser prorrogado nos termos desta Norma.
+Art. 10. Compete ao Colegiado de Curso aprovar o Projeto Pedagógico.
+"""
+
+TEXTO_CONTADOR = """\
+=== página 16 ===
+Art. 50. O ingresso será realizado, semestralmente, havendo vagas ociosas.
+16/52
+§ 2º O ingressante não possui prioridade de matrícula.
+"""
+
+
+def test_artigos_de_1_a_9_usam_ordinal_sem_ponto():
+    trechos = dividir_em_artigos(TEXTO_ORDINAIS)
+    assert [t["artigo"] for t in trechos] == ["1", "2", "10"]
+    assert "Esta Norma disciplina" in trechos[0]["texto"]
+    assert "Parágrafo único" in normalizar(trechos[1]["texto"])
+
+
+def test_contador_de_paginas_do_sei_sai_do_texto():
+    trechos = dividir_em_artigos(TEXTO_CONTADOR)
+    texto = normalizar(trechos[0]["texto"])
+    assert "16/52" not in texto
+    assert "§ 2º" in texto
+
+TEXTO_SEM_PONTO = """\
+=== página 49 ===
+Art. 201. A guarda e o arquivamento de documentos acadêmicos seguem as regras de temporalidade.
+
+Art 202. O Plano de Ensino preliminar deverá ser entregue à Coordenação antes da matrícula. (Revogado pela Resolução CONGRAD Nº 107, de 07 de junho de 2023)
+"""
+
+TEXTO_MARCACAO_PARTIDA = """\
+=== página 46 ===
+Art. 188. A análise da equivalência será feita por meio da comparação da carga horária.
+§ 3º Para o reconhecimento da equivalência, a Coordenação poderá propor a Complementação de Estudos se: (Redação dada pela Resolução
+46/52
+CONGRAD nº 78, de 16 de novembro de 2022)
+I – faltar até 1/3 (um terço) da carga horária exigida; e/ou
+"""
+
+TEXTO_COM_TITULOS = """\
+=== página 28 ===
+Art. 98. O ajuste de renovação da matrícula poderá ser deferido em casos previstos.
+§ 3º O prazo para ajuste se estenderá até o 12º dia letivo. (Incluído pela Resolução CONGRAD Nº 107, de 07 de junho de 2023)
+
+CAPÍTULO VIII
+DO TRANCAMENTO DE MATRÍCULA
+Art. 99. O estudante matriculado poderá requerer o trancamento de matrícula.
+"""
+
+
+def test_art_sem_ponto_nao_contamina_o_artigo_anterior():
+    trechos = dividir_em_artigos(TEXTO_SEM_PONTO)
+    assert [t["artigo"] for t in trechos] == ["201"]  # 202 é revogado e some
+    texto = normalizar(trechos[0]["texto"])
+    assert "Plano de Ensino" not in texto
+    assert "(Revogado" not in texto
+
+
+def test_marcacao_partida_pelo_contador_de_paginas_sai_inteira():
+    t = dividir_em_artigos(TEXTO_MARCACAO_PARTIDA)[0]
+    texto = normalizar(t["texto"])
+    assert "Redação dada" not in texto
+    assert "CONGRAD" not in texto
+    assert "faltar até 1/3" in texto
+    assert any("78" in a for a in t["alteracoes"])
+
+
+def test_marcacao_com_N_maiusculo_e_reconhecida():
+    t = dividir_em_artigos(TEXTO_COM_TITULOS)[0]
+    assert "(Incluído" not in normalizar(t["texto"])
+    assert any("107" in a for a in t["alteracoes"])
+
+
+def test_titulo_sai_do_artigo_anterior_e_vira_metadado_do_seguinte():
+    art98, art99 = dividir_em_artigos(TEXTO_COM_TITULOS)
+    assert "CAPÍTULO" not in art98["texto"]
+    assert "TRANCAMENTO" not in art98["texto"]
+    assert "CAPÍTULO VIII" in art99["capitulo"]
+    assert "TRANCAMENTO DE MATRÍCULA" in art99["capitulo"]
+
+TEXTO_REGIMENTO = """\
+=== página 5 ===
+Art. 12  Os cursos de graduação são organizados em currículos plenos.
+
+Art. 13  Os cursos de graduação são administrados por um Diretor de Curso, e os
+demais cursos por um Coordenador, conforme o Estatuto.
+Art. 14  A Universidade manterá cursos de pós-graduação, conforme este Regimento.
+"""
+
+TEXTO_CITACAO_NO_INICIO_DA_LINHA = """\
+=== página 5 ===
+Art. 12. A aprovação seguirá os critérios definidos, ressalvado o disposto
+Art. 18 desta Norma e demais exceções previstas.
+Art. 13. Compete ao Colegiado aprovar o Projeto Pedagógico.
+"""
+
+
+def test_artigo_sem_ponto_depois_do_numero_no_regimento_uniube():
+    trechos = dividir_em_artigos(TEXTO_REGIMENTO)
+    assert [t["artigo"] for t in trechos] == ["12", "13", "14"]
+    texto = normalizar(trechos[1]["texto"])
+    assert "Diretor de Curso" in texto
+    assert "demais cursos" in texto
+
+
+def test_citacao_no_inicio_da_linha_nao_vira_artigo():
+    trechos = dividir_em_artigos(TEXTO_CITACAO_NO_INICIO_DA_LINHA)
+    assert [t["artigo"] for t in trechos] == ["12", "13"]
+    assert "Art. 18 desta Norma" in normalizar(trechos[0]["texto"])
