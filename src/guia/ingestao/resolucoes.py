@@ -154,7 +154,7 @@ def _extrair_titulos(bloco: str) -> tuple[str, str, str]:
     # Trabalha linha a linha para respeitar linhas em branco entre cabeçalho e nome.
     linhas = bloco.split('\n')
     resultado: list[str] = []
-    capitulo = ''
+    capitulo: str | None = None  # None = sem alteração; "" = zerar; str = novo valor
     secao = ''
     i = 0
     palavra_chave_re = re.compile(
@@ -193,12 +193,12 @@ def _extrair_titulos(bloco: str) -> tuple[str, str, str]:
             titulo_completo = f"{cabecalho} {nome}".strip() if nome else cabecalho
 
             # Atualiza hierarquia
-            if 'TIT' in kw or 'TÍT' in kw or kw.startswith('T'):
-                # TÍTULO: zera capitulo e secao
-                capitulo = titulo_completo
+            if 'TIT' in kw or 'T\u00cdT' in kw or kw.startswith('T'):
+                # TÍTULO: zera capitulo e secao (não vira o novo capitulo)
+                capitulo = ''
                 secao = ''
             elif 'CAP' in kw:
-                # CAPÍTULO: zera secao
+                # CAPÍTULO: define novo capitulo, zera secao
                 capitulo = titulo_completo
                 secao = ''
             else:
@@ -424,7 +424,19 @@ def dividir_em_artigos(texto: str) -> list[dict]:
     capitulo_corrente = ''
     secao_corrente = ''
 
-    for pos_bloco, num, bloco in _dividir_em_blocos_de_artigo(texto):
+    # Inicializa metadados com títulos que aparecem ANTES do primeiro artigo.
+    blocos = _dividir_em_blocos_de_artigo(texto)
+    if blocos:
+        primeiro_pos = blocos[0][0]
+        prefixo_global = texto[:primeiro_pos]
+        _, cap_init, sec_init = _extrair_titulos(prefixo_global)
+        if cap_init is not None:
+            capitulo_corrente = cap_init
+            secao_corrente = sec_init
+        elif sec_init:
+            secao_corrente = sec_init
+
+    for pos_bloco, num, bloco in blocos:
         # Atualiza página corrente com a última página vista antes deste bloco
         pags_antes = [int(m.group(1)) for m in _PAG_RE.finditer(texto[:pos_bloco])]
         if pags_antes:
@@ -434,9 +446,29 @@ def dividir_em_artigos(texto: str) -> list[dict]:
         if paginas:
             pagina_corrente = max(paginas)
 
-        # Extrair e remover títulos estruturais do bloco.
-        # Títulos encontrados aqui pertencem ao próximo artigo, não a este.
-        bloco_sem_titulos, cap_encontrado, sec_encontrada = _extrair_titulos(bloco)
+        # Separar o bloco em:
+        #   prefixo: texto antes de "Art. N" (pode conter títulos estruturais)
+        #   corpo   : de "Art. N" em diante
+        # Usamos _ARTIGO_RE para achar o início do "Art. N" dentro do bloco.
+        m_art = _ARTIGO_RE.search(bloco)
+        if m_art:
+            prefixo = bloco[:m_art.start()]
+            corpo = bloco[m_art.start():]
+        else:
+            prefixo = ''
+            corpo = bloco
+
+        # Títulos no prefixo → atualizam metadados do ARTIGO CORRENTE.
+        if prefixo.strip():
+            _, cap_pre, sec_pre = _extrair_titulos(prefixo)
+            if cap_pre is not None:
+                capitulo_corrente = cap_pre
+                secao_corrente = sec_pre
+            elif sec_pre:
+                secao_corrente = sec_pre
+
+        # Títulos no corpo → serão propagados para artigos SEGUINTES.
+        bloco_sem_titulos, cap_encontrado, sec_encontrada = _extrair_titulos(corpo)
 
         # Divide em unidades e aplica vigência
         unidades = _dividir_artigo_em_unidades(num, bloco_sem_titulos)
@@ -458,6 +490,12 @@ def dividir_em_artigos(texto: str) -> list[dict]:
 
         # Artigo completamente revogado → texto vazio → não entra no resultado.
         if not texto_vigente:
+            # Mesmo revogado, propaga metadados do corpo para o próximo artigo.
+            if cap_encontrado is not None:
+                capitulo_corrente = cap_encontrado
+                secao_corrente = sec_encontrada
+            elif sec_encontrada:
+                secao_corrente = sec_encontrada
             continue
 
         if num not in artigos_vistos:
@@ -485,12 +523,10 @@ def dividir_em_artigos(texto: str) -> list[dict]:
             }
 
         # Atualiza metadados estruturais APÓS registrar o artigo corrente.
-        # Títulos encontrados neste bloco pertencem aos artigos SEGUINTES.
-        if cap_encontrado:
-            # cap_encontrado pode ser TÍTULO ou CAPÍTULO — ambos já zeraram secao
-            # dentro de _extrair_titulos; aqui apenas propagamos.
+        # Títulos encontrados no CORPO deste bloco pertencem aos artigos SEGUINTES.
+        if cap_encontrado is not None:
             capitulo_corrente = cap_encontrado
-            secao_corrente = sec_encontrada  # vazia se capítulo/título
+            secao_corrente = sec_encontrada
         elif sec_encontrada:
             secao_corrente = sec_encontrada
 
