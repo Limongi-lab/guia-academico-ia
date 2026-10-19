@@ -95,7 +95,7 @@ def main() -> None:
         if doc_id == args.doc:
             for r in registros:
                 if r["artigo"] in args.mostrar:
-                    print(f"\n--- Art. {r['artigo']} (páginas {r['paginas']})\n{r['texto']}")
+                    print(f"\n--- Art. {r['artigo']} (páginas {r['paginas']}) | {r.get('capitulo', '')} | {r.get('secao', '')}\n{r['texto']}")
 
     print(f"\nArquivos em {saida}")
 

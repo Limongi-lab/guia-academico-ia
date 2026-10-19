@@ -445,3 +445,33 @@ def test_capitulo_com_caixa_mista_e_linha_em_branco():
     assert "DA ORGANIZAÇÃO DIDÁTICA" not in art1["texto"]
     assert "Capítulo II" in art2["capitulo"]
     assert "DA ORGANIZAÇÃO DIDÁTICA" in art2["capitulo"]
+
+TEXTO_TITULO_ZERA_CAPITULO = """\
+=== página 3 ===
+TÍTULO I
+DAS DISPOSIÇÕES GERAIS
+
+CAPÍTULO I
+DOS OBJETIVOS
+
+Art. 1º Estas Normas disciplinam o estágio dos estudantes.
+
+TÍTULO II
+DA ORGANIZAÇÃO
+
+Art. 2º O estágio é ato educativo supervisionado.
+
+CAPÍTULO I
+DA COORDENAÇÃO
+
+Art. 3º A coordenação é exercida pelo Coordenador de Estágio.
+"""
+
+
+def test_titulo_novo_zera_capitulo_e_secao():
+    art1, art2, art3 = dividir_em_artigos(TEXTO_TITULO_ZERA_CAPITULO)
+    assert "CAPÍTULO I" in art1["capitulo"] and "DOS OBJETIVOS" in art1["capitulo"]
+    assert "TÍTULO II" not in art1["texto"] and "ORGANIZAÇÃO" not in art1["texto"]
+    assert art2["capitulo"] == ""  # o TÍTULO II zerou o capítulo do título anterior
+    assert art2["secao"] == ""
+    assert "CAPÍTULO I" in art3["capitulo"] and "DA COORDENAÇÃO" in art3["capitulo"]

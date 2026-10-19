@@ -121,34 +121,103 @@ def _limpar_marcacoes(texto: str) -> str:
 # Extração de títulos estruturais do bloco bruto
 # ---------------------------------------------------------------------------
 
-def _extrair_titulos(bloco: str) -> tuple[str, str]:
-    """Remove linhas de título do bloco e retorna (bloco_limpo, titulo_concatenado).
+# Linha isolada em maiúsculas começando com DO/DA/DOS/DAS (título de seção avulso).
+# Ex.: "DOS EDITAIS E SUAS PARTES". Deve estar sozinha na linha.
+_SECAO_AVULSA_RE = re.compile(
+    r'^(D(?:O|A|OS|AS)\s+[A-ZÁÀÂÃÉÊÍÓÔÕÚÜÇ][A-ZÁÀÂÃÉÊÍÓÔÕÚÜÇ ]+)\s*$',
+    re.MULTILINE,
+)
 
-    Títulos: linhas iniciadas por CAPÍTULO/TÍTULO/SEÇÃO/SUBSEÇÃO (qualquer caixa)
-    mais a linha imediatamente seguinte com o nome (ex.: "DO TRANCAMENTO DE MATRÍCULA").
-    As duas linhas são concatenadas com espaço para formar o metadado.
+# Prefixos que impedem uma linha de ser o "nome" de um título estrutural
+_NOME_INVALIDO_RE = re.compile(
+    r'^(?:Art\.?|§|Parágrafo|[IVXLCDM]+\s*[.–\-])',
+    re.IGNORECASE,
+)
 
-    Estratégia: cada match do _TITULO_RE captura apenas a linha da palavra-chave;
-    a linha de nome fica na linha seguinte — capturamos ambas com uma versão
-    estendida do padrão.
+
+def _extrair_titulos(bloco: str) -> tuple[str, str, str]:
+    """Remove linhas de título do bloco; retorna (bloco_limpo, capitulo, secao).
+
+    Títulos estruturais: linhas iniciadas por CAPÍTULO/TÍTULO/SEÇÃO/SUBSEÇÃO
+    (qualquer caixa). O nome pode estar na linha seguinte ou após uma ou mais
+    linhas em branco. O nome é válido se começa com D+(o|a|os|as) ou estiver
+    todo em maiúsculas, e não começar com Art/§/Parágrafo/numeral romano.
+
+    Linhas isoladas DO/DA/DOS/DAS em maiúsculas (sem palavra-chave estrutural
+    antes) viram seção avulsa (campo 'secao').
+
+    Hierarquia:
+    - TÍTULO  → zera capitulo e secao; define novo capitulo.
+    - CAPÍTULO→ zera secao; define novo capitulo.
+    - SEÇÃO/SUBSEÇÃO → define secao.
     """
-    # Padrão que captura palavra-chave + resto da linha + linha seguinte (nome)
-    titulo_bloco_re = re.compile(
-        r'^((?:CAP[ÍI]TULO|T[ÍI]TULO|SE[ÇC][ÃA]O|SUBSE[ÇC][ÃA]O)\b[^\n]*)\n([^\n]+)',
-        re.IGNORECASE | re.MULTILINE,
+    # Trabalha linha a linha para respeitar linhas em branco entre cabeçalho e nome.
+    linhas = bloco.split('\n')
+    resultado: list[str] = []
+    capitulo = ''
+    secao = ''
+    i = 0
+    palavra_chave_re = re.compile(
+        r'^[ \t]*(CAP[ÍI]TULO|T[ÍI]TULO|SE[ÇC][ÃA]O|SUBSE[ÇC][ÃA]O)\b',
+        re.IGNORECASE,
+    )
+    nome_re = re.compile(
+        r'^[ \t]*(?:D(?:O|A|OS|AS)\b|[A-ZÁÀÂÃÉÊÍÓÔÕÚÜÇ]{2})',
     )
 
-    titulos: list[str] = []
+    while i < len(linhas):
+        linha = linhas[i]
+        m_kw = palavra_chave_re.match(linha)
+        if m_kw:
+            cabecalho = linha.strip()
+            kw = m_kw.group(1).upper()
+            # Procura próxima linha não-vazia para ser o nome
+            j = i + 1
+            while j < len(linhas) and not linhas[j].strip():
+                j += 1
+            nome = ''
+            if j < len(linhas):
+                candidato = linhas[j].strip()
+                # Valida: começa com D+(o/a/os/as) OU todo em maiúsculas (sem acento minúsculo)
+                # E NÃO começa com Art/§/Parágrafo/numeral romano
+                parece_nome = (
+                    re.match(r'^D(?:o|a|os|as|O|A|OS|AS)\b', candidato)
+                    or (candidato == candidato.upper() and candidato.strip())
+                )
+                if parece_nome and not _NOME_INVALIDO_RE.match(candidato):
+                    nome = candidato
+                    # Remove linhas em branco entre cabeçalho e nome do resultado
+                    # (já não serão adicionadas pois avançamos i até j)
+                    i = j  # i será incrementado no final do loop → j+1
 
-    def _substituir(m: re.Match) -> str:
-        linha_chave = m.group(1).strip()
-        linha_nome = m.group(2).strip()
-        titulos.append(f"{linha_chave} {linha_nome}")
-        return ''   # remove do bloco
+            titulo_completo = f"{cabecalho} {nome}".strip() if nome else cabecalho
 
-    bloco_limpo = titulo_bloco_re.sub(_substituir, bloco)
-    titulo = ' '.join(titulos).strip()
-    return bloco_limpo, titulo
+            # Atualiza hierarquia
+            if 'TIT' in kw or 'TÍT' in kw or kw.startswith('T'):
+                # TÍTULO: zera capitulo e secao
+                capitulo = titulo_completo
+                secao = ''
+            elif 'CAP' in kw:
+                # CAPÍTULO: zera secao
+                capitulo = titulo_completo
+                secao = ''
+            else:
+                # SEÇÃO / SUBSEÇÃO
+                secao = titulo_completo
+            i += 1
+            continue
+
+        # Verifica linha avulsa DO/DA/DOS/DAS em maiúsculas
+        m_av = _SECAO_AVULSA_RE.match(linha)
+        if m_av:
+            secao = m_av.group(1).strip()
+            i += 1
+            continue
+
+        resultado.append(linha)
+        i += 1
+
+    return '\n'.join(resultado), capitulo, secao
 
 
 # ---------------------------------------------------------------------------
@@ -225,19 +294,27 @@ def _aplicar_vigencia(unidades: list[_Unidade]) -> list[_Unidade]:
 # Divisão em artigos
 # ---------------------------------------------------------------------------
 
-def _dividir_em_blocos_de_artigo(texto: str) -> list[tuple[str, str]]:
-    """Retorna lista de (numero_artigo, texto_bruto) na ordem do documento.
+def _dividir_em_blocos_de_artigo(texto: str) -> list[tuple[int, str, str]]:
+    """Retorna lista de (pos, numero_artigo, texto_bruto) na ordem do documento.
 
     Filtro monotônico: rejeita candidatos com número MENOR que o último aceito,
     para evitar tratar citações internas ("conforme art. 5º desta Norma") como
     novos artigos. Números iguais são permitidos (artigo com redação substituída).
+
+    Regra de preâmbulo de aprovação: se aparece um "Art. 1" e o maior número
+    visto até agora é <= 10, tudo que veio antes é preâmbulo e é descartado.
+    Se o maior número visto já for > 10, é citação — o filtro monotônico cuida.
     """
     candidatos = [(m.start(), m.group(1)) for m in _ARTIGO_RE.finditer(texto)]
 
-    posicoes: list[tuple[int, str]] = []
+    posicoes: list[tuple[int, str]] = []  # (pos_no_texto, num_str)
     ultimo_num = -1
     for pos, num_str in candidatos:
         n = int(num_str)
+        if n == 1 and ultimo_num != -1 and ultimo_num <= 10:
+            # Novo Art. 1 após artigos de preâmbulo (máx <= 10): reiniciar.
+            posicoes = []
+            ultimo_num = -1
         if n >= ultimo_num:          # aceita igual (duplicata vigente) ou maior
             posicoes.append((pos, num_str))
             if n > ultimo_num:       # régua só avança quando cresce
@@ -246,7 +323,7 @@ def _dividir_em_blocos_de_artigo(texto: str) -> list[tuple[str, str]]:
     blocos = []
     for idx, (pos, num) in enumerate(posicoes):
         fim = posicoes[idx + 1][0] if idx + 1 < len(posicoes) else len(texto)
-        blocos.append((num, texto[pos:fim]))
+        blocos.append((pos, num, texto[pos:fim]))
     return blocos
 
 
@@ -347,9 +424,9 @@ def dividir_em_artigos(texto: str) -> list[dict]:
     capitulo_corrente = ''
     secao_corrente = ''
 
-    for num, bloco in _dividir_em_blocos_de_artigo(texto):
+    for pos_bloco, num, bloco in _dividir_em_blocos_de_artigo(texto):
         # Atualiza página corrente com a última página vista antes deste bloco
-        pags_antes = [int(m.group(1)) for m in _PAG_RE.finditer(texto[:texto.find(bloco)])]
+        pags_antes = [int(m.group(1)) for m in _PAG_RE.finditer(texto[:pos_bloco])]
         if pags_antes:
             pagina_corrente = pags_antes[-1]
 
@@ -359,7 +436,7 @@ def dividir_em_artigos(texto: str) -> list[dict]:
 
         # Extrair e remover títulos estruturais do bloco.
         # Títulos encontrados aqui pertencem ao próximo artigo, não a este.
-        bloco_sem_titulos, titulo_encontrado = _extrair_titulos(bloco)
+        bloco_sem_titulos, cap_encontrado, sec_encontrada = _extrair_titulos(bloco)
 
         # Divide em unidades e aplica vigência
         unidades = _dividir_artigo_em_unidades(num, bloco_sem_titulos)
@@ -409,15 +486,13 @@ def dividir_em_artigos(texto: str) -> list[dict]:
 
         # Atualiza metadados estruturais APÓS registrar o artigo corrente.
         # Títulos encontrados neste bloco pertencem aos artigos SEGUINTES.
-        if titulo_encontrado:
-            palavra = titulo_encontrado.split()[0].upper()
-            if any(kw in palavra for kw in ('CAP', 'TIT', 'TÍT')):
-                # Novo capítulo: zera a seção
-                capitulo_corrente = titulo_encontrado
-                secao_corrente = ''
-            else:
-                # Seção/Subseção: mantém o capítulo, atualiza seção
-                secao_corrente = titulo_encontrado
+        if cap_encontrado:
+            # cap_encontrado pode ser TÍTULO ou CAPÍTULO — ambos já zeraram secao
+            # dentro de _extrair_titulos; aqui apenas propagamos.
+            capitulo_corrente = cap_encontrado
+            secao_corrente = sec_encontrada  # vazia se capítulo/título
+        elif sec_encontrada:
+            secao_corrente = sec_encontrada
 
     artigos = list(artigos_vistos.values())
     # Truncar cauda do ÚLTIMO artigo: remove texto posterior à primeira linha
