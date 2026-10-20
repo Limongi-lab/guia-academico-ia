@@ -1,4 +1,4 @@
-﻿"""Divisão de artigos longos em trechos menores para indexação.
+"""Divisão de artigos longos em trechos menores para indexação.
 
 Regras (conforme contrato):
 1. Se len(artigo["texto"]) <= limite_artigo  ->  devolve um único trecho intacto.
@@ -39,6 +39,15 @@ _PARAGRAFO_RE = re.compile(
     r'^[ \t\u00a0]*(§|Parágrafo único)',
 )
 
+# ---------------------------------------------------------------------------
+# Padrão de reconhecimento de alínea de primeiro nível (regra nova)
+# Ignora espaços, tabs e NBSP iniciais; uma única letra minúscula seguida de
+# ")" e espaço. Só abre bloco próprio quando nenhum inciso está aberto.
+# ---------------------------------------------------------------------------
+_ALINEA_RE = re.compile(
+    r'^[ \t\u00a0]*[a-z]\) ',
+)
+
 
 def _eh_inciso(linha: str) -> bool:
     return bool(_INCISO_RE.match(linha))
@@ -48,13 +57,19 @@ def _eh_paragrafo(linha: str) -> bool:
     return bool(_PARAGRAFO_RE.match(linha))
 
 
+def _eh_alinea(linha: str) -> bool:
+    return bool(_ALINEA_RE.match(linha))
+
+
 def _blocos_do_artigo(linhas: list[str]) -> tuple[str, list[tuple[str, list[str]]]]:
     """Separa o caput e retorna (caput, [(tipo, linhas_do_bloco)]).
 
-    tipo é "inciso" para incisos do caput e "paragrafo" para §/Parágrafo único
-    (inclusive os incisos que pertencem ao parágrafo).
+    tipos possíveis: "inciso", "alinea" (primeiro nível, sem inciso acima),
+    "paragrafo" (§ ou Parágrafo único, com seus incisos/alíneas internos).
 
-    Alíneas e continuações grudam no bloco imediatamente anterior (regra 4).
+    Alíneas de primeiro nível: abrem bloco próprio SOMENTE quando nenhum inciso
+    ou parágrafo está aberto (tipo_corrente != "inciso" e em_paragrafo=False).
+    Dentro de incisos ou parágrafos, alíneas grudam no bloco anterior (regra 4).
     Incisos após § pertencem ao § (regra 5).
     """
     caput_linhas: list[str] = []
@@ -83,6 +98,12 @@ def _blocos_do_artigo(linhas: list[str]) -> tuple[str, list[tuple[str, list[str]
                 em_paragrafo = True
                 tipo_corrente = "paragrafo"
                 bloco_corrente.append(linha)
+            elif _eh_alinea(linha):
+                # Alínea de primeiro nível sob o caput (sem inciso acima)
+                primeira_divisao_encontrada = True
+                em_paragrafo = False
+                tipo_corrente = "alinea"
+                bloco_corrente.append(linha)
             else:
                 caput_linhas.append(linha)
         else:
@@ -101,8 +122,15 @@ def _blocos_do_artigo(linhas: list[str]) -> tuple[str, list[tuple[str, list[str]
                     _fechar_bloco()
                     tipo_corrente = "inciso"
                     bloco_corrente.append(linha)
+            elif _eh_alinea(linha) and not em_paragrafo and tipo_corrente != "inciso":
+                # Alínea de primeiro nível: abre bloco próprio somente se não
+                # há inciso nem parágrafo aberto (tipo corrente é "alinea" ou
+                # ainda não há bloco — mas neste branch já temos divisao)
+                _fechar_bloco()
+                tipo_corrente = "alinea"
+                bloco_corrente.append(linha)
             else:
-                # Alínea ou continuação: pertence ao bloco anterior (regra 4)
+                # Alínea dentro de inciso/parágrafo, ou continuação: gruda no bloco anterior
                 bloco_corrente.append(linha)
 
     _fechar_bloco()
@@ -159,10 +187,10 @@ def dividir_artigo(
             "total_partes": 1,
         }]
 
-    # ---------- Agrupamento de incisos do caput (regras 3 e 4) ----------
+    # ---------- Agrupamento de incisos/alíneas do caput (regras 3, 4 e nova) ----------
     # Parágrafos viram trechos próprios imediatamente (regra 5).
-    # Incisos são agrupados gulosa enquanto o corpo acumulado <= limite_grupo.
-    # Um único inciso maior que o limite fica sozinho (sem corte).
+    # Incisos e alíneas de primeiro nível são agrupados gulosa até limite_grupo.
+    # Um bloco sozinho maior que o limite fica inteiro em trecho próprio (sem corte).
 
     corpos: list[str] = []      # corpo de cada trecho (sem caput)
     acum_linhas: list[str] = [] # acumulador de linhas do grupo corrente de incisos
@@ -179,13 +207,13 @@ def dividir_artigo(
         corpo_bloco = "\n".join(linhas_bloco)
 
         if tipo == "paragrafo":
-            # Regra 5: fecha grupo de incisos pendente; parágrafo vira trecho próprio
+            # Regra 5: fecha grupo pendente; parágrafo vira trecho próprio
             flush()
             corpos.append(corpo_bloco)
         else:
-            # tipo == "inciso": agrupamento guloso (regra 3)
+            # tipo == "inciso" ou "alinea": agrupamento guloso (regras 3 e nova)
             if not acum_linhas:
-                # Primeiro inciso do grupo: sempre entra (mesmo que ultrapasse limite_grupo)
+                # Primeiro bloco do grupo: sempre entra (mesmo que ultrapasse limite_grupo)
                 acum_linhas.extend(linhas_bloco)
                 acum_len = len(corpo_bloco)
             else:
@@ -195,7 +223,7 @@ def dividir_artigo(
                     acum_linhas.extend(linhas_bloco)
                     acum_len = novo_len
                 else:
-                    # Não cabe: fecha grupo atual e abre novo com este inciso
+                    # Não cabe: fecha grupo atual e abre novo com este bloco
                     flush()
                     acum_linhas.extend(linhas_bloco)
                     acum_len = len(corpo_bloco)
