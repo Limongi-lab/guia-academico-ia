@@ -117,6 +117,15 @@ def _limpar_marcacoes(texto: str) -> str:
     return _MARCA_RE.sub('', _PAG_RE.sub('', texto))
 
 
+def _limpar_marcacoes_sem_pag(texto: str) -> str:
+    """Remove anotações de alteração mas MANTÉM os marcadores de página.
+
+    Usado para calcular marcas_pagina: os marcadores precisam permanecer
+    para que possamos rastrear as quebras de página no texto vigente.
+    """
+    return _MARCA_RE.sub('', texto)
+
+
 # ---------------------------------------------------------------------------
 # Extração de títulos estruturais do bloco bruto
 # ---------------------------------------------------------------------------
@@ -344,6 +353,77 @@ def _paginas_do_bloco(bloco: str, pagina_atual: int) -> list[int]:
     return sorted(paginas)
 
 
+def _calcular_marcas_pagina(
+    texto_vigente_com_marcadores: str,
+    pagina_inicial: int,
+    texto_final: str,
+) -> list[list[int]]:
+    """Retorna lista de [posicao, pagina] para o texto final.
+
+    Estratégia: alinha as linhas não-vazias e não-marcador do texto pré-limpeza
+    com as linhas não-vazias do texto final (a limpeza só mexe em linhas em branco
+    e espaços no fim de linha), rastreando a página corrente a cada marcador.
+    """
+    pagina_corrente = pagina_inicial
+    # Itera linha a linha pelo texto com marcadores; registra quebras de página
+    # e computa a posição correspondente no texto_final por alinhamento de linhas.
+    linhas_com = texto_vigente_com_marcadores.splitlines()
+    linhas_finais = texto_final.splitlines()
+
+    # Índice na lista de linhas_finais (só linhas não-vazias)
+    idx_final = 0
+    # Posição acumulada em texto_final (em caracteres)
+    pos_char = 0
+    # linha->pos: calcula antecipadamente o offset de cada linha do texto_final
+    offsets_finais: list[int] = []
+    acum = 0
+    for linha in linhas_finais:
+        offsets_finais.append(acum)
+        acum += len(linha) + 1  # +1 pelo '\n'
+
+    marcas: list[list[int]] = []
+    # Página inicial: posição 0, página vigente quando começa
+    # (será ajustada se o primeiro caractere não-vazio vier após um marcador)
+    primeira_pagina = pagina_inicial
+    primeira_pos = 0
+    primeira_registrada = False
+
+    pagina_pendente: int | None = None  # página nova antes de ver próximo não-vazio
+
+    for linha in linhas_com:
+        m = _PAG_RE.match(linha)
+        if m:
+            nova_pag = int(m.group(1))
+            pagina_corrente = nova_pag
+            pagina_pendente = nova_pag
+            continue
+        # Linha real (pode ser vazia)
+        if not linha.strip():
+            continue
+        # Linha não-vazia: avança no texto_final
+        if idx_final >= len(linhas_finais):
+            break
+        # Pula linhas vazias no texto_final
+        while idx_final < len(linhas_finais) and not linhas_finais[idx_final].strip():
+            idx_final += 1
+        if idx_final >= len(linhas_finais):
+            break
+        pos = offsets_finais[idx_final]
+        if not primeira_registrada:
+            primeira_pagina = pagina_corrente
+            primeira_pos = pos  # deve ser 0 pois texto_final foi .strip()
+            primeira_registrada = True
+            pagina_pendente = None
+        elif pagina_pendente is not None:
+            marcas.append([pos, pagina_pendente])
+            pagina_pendente = None
+        idx_final += 1
+
+    # A primeira marca é sempre [0, pagina_inicial_do_artigo]
+    marcas_ordenadas = sorted(marcas, key=lambda x: x[0])
+    return [[0, primeira_pagina]] + marcas_ordenadas
+
+
 # ---------------------------------------------------------------------------
 # Divisão de um artigo em suas unidades internas
 # ---------------------------------------------------------------------------
@@ -498,6 +578,18 @@ def dividir_em_artigos(texto: str) -> list[dict]:
                 secao_corrente = sec_encontrada
             continue
 
+        # Texto vigente com marcadores (antes da remoção de _PAG_RE)
+        texto_vigente_com_marcadores = '\n'.join(
+            _limpar_marcacoes_sem_pag(u.texto) for u in unidades_vigentes
+        ).strip()
+        texto_vigente_com_marcadores = re.sub(r'[ \t]+\n', '\n', texto_vigente_com_marcadores)
+
+        marcas_pagina = _calcular_marcas_pagina(
+            texto_vigente_com_marcadores,
+            paginas[0] if paginas else pagina_corrente,
+            texto_vigente,
+        )
+
         if num not in artigos_vistos:
             artigos_vistos[num] = {
                 'artigo': num,
@@ -506,10 +598,12 @@ def dividir_em_artigos(texto: str) -> list[dict]:
                 'alteracoes': list(dict.fromkeys(todas_resolucoes)),
                 'capitulo': capitulo_corrente,
                 'secao': secao_corrente,
+                'marcas_pagina': marcas_pagina,
             }
         else:
             # Artigo já visto: versão mais nova (Redação dada) substitui o texto.
             # Páginas e alterações são acumuladas de todas as ocorrências.
+            # marcas_pagina vêm da versão nova.
             anterior = artigos_vistos[num]
             artigos_vistos[num] = {
                 'artigo': num,
@@ -520,6 +614,7 @@ def dividir_em_artigos(texto: str) -> list[dict]:
                 )),
                 'capitulo': capitulo_corrente,
                 'secao': secao_corrente,
+                'marcas_pagina': marcas_pagina,
             }
 
         # Atualiza metadados estruturais APÓS registrar o artigo corrente.

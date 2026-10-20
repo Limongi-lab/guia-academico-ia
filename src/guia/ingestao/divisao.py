@@ -139,6 +139,30 @@ def _blocos_do_artigo(linhas: list[str]) -> tuple[str, list[tuple[str, list[str]
     return caput, blocos
 
 
+def _pagina_em(pos: int, marcas: list[list[int]]) -> int:
+    """Retorna a página vigente na posição pos (última marca com posicao <= pos)."""
+    pagina = marcas[0][1]
+    for posicao, pag in marcas:
+        if posicao <= pos:
+            pagina = pag
+        else:
+            break
+    return pagina
+
+
+def _paginas_do_trecho(ini: int, fim: int, marcas: list[list[int]]) -> list[int]:
+    """Páginas do corpo de um trecho dado pelas marcas_pagina do artigo.
+
+    Inclui a página vigente em ini e todas as páginas de marcas com posicao
+    estritamente dentro de (ini, fim), sem repetição, ordenadas.
+    """
+    paginas: set[int] = {_pagina_em(ini, marcas)}
+    for posicao, pag in marcas:
+        if ini < posicao < fim:
+            paginas.add(pag)
+    return sorted(paginas)
+
+
 def dividir_artigo(
     artigo: dict,
     limite_artigo: int = 1500,
@@ -160,14 +184,20 @@ def dividir_artigo(
     list[dict]
         Lista de trechos. Cada trecho é uma cópia do dict de entrada com "texto"
         trocado, e as chaves adicionais "id", "parte" e "total_partes".
+        "marcas_pagina" é removido dos trechos; as páginas do trecho são
+        calculadas a partir de "marcas_pagina" e armazenadas em "paginas".
     """
     texto: str = artigo["texto"]
     num_artigo = artigo["artigo"]
+    marcas: list[list[int]] | None = artigo.get("marcas_pagina") or None
+
+    # Base do artigo sem marcas_pagina (nunca propagamos marcas_pagina para trechos)
+    artigo_base = {k: v for k, v in artigo.items() if k != "marcas_pagina"}
 
     # Regra 1: artigo curto fica inteiro
     if len(texto) <= limite_artigo:
         return [{
-            **artigo,
+            **artigo_base,
             "texto": texto,
             "id": f"art-{num_artigo}#1",
             "parte": 1,
@@ -180,12 +210,27 @@ def dividir_artigo(
     # Regra 7: artigo longo sem inciso nem parágrafo -> trecho único, sem cortar
     if not blocos:
         return [{
-            **artigo,
+            **artigo_base,
             "texto": texto,
             "id": f"art-{num_artigo}#1",
             "parte": 1,
             "total_partes": 1,
         }]
+
+    # Calcula o offset de início de cada bloco dentro de texto.
+    # caput ocupa chars 0..len(caput); depois vem '\n' + cada bloco separado por '\n'.
+    # Usamos a mesma lógica de split("\n") para achar posições.
+    caput_len = len(caput)  # não inclui o '\n' separador
+    bloco_inis: list[int] = []  # offset em texto do primeiro char do bloco
+    bloco_fins: list[int] = []  # offset em texto após o último char do bloco
+    pos = caput_len + 1  # +1 pelo '\n' após o caput
+    for _, linhas_bloco in blocos:
+        corpo_bloco = "\n".join(linhas_bloco)
+        ini_b = pos
+        fim_b = pos + len(corpo_bloco)
+        bloco_inis.append(ini_b)
+        bloco_fins.append(fim_b)
+        pos = fim_b + 1  # +1 pelo '\n' separador
 
     # ---------- Agrupamento de incisos/alíneas do caput (regras 3, 4 e nova) ----------
     # Parágrafos viram trechos próprios imediatamente (regra 5).
@@ -193,40 +238,55 @@ def dividir_artigo(
     # Um bloco sozinho maior que o limite fica inteiro em trecho próprio (sem corte).
 
     corpos: list[str] = []      # corpo de cada trecho (sem caput)
+    corpo_inis: list[int] = []  # offset de início do corpo no texto original
+    corpo_fins: list[int] = []  # offset de fim do corpo no texto original
     acum_linhas: list[str] = [] # acumulador de linhas do grupo corrente de incisos
     acum_len: int = 0           # comprimento do corpo do grupo corrente
+    acum_ini: int = 0           # offset de início do grupo acumulado
+    acum_fim: int = 0           # offset de fim do grupo acumulado
 
     def flush() -> None:
-        nonlocal acum_len
+        nonlocal acum_len, acum_ini, acum_fim
         if acum_linhas:
             corpos.append("\n".join(acum_linhas))
+            corpo_inis.append(acum_ini)
+            corpo_fins.append(acum_fim)
             acum_linhas.clear()
             acum_len = 0
 
-    for tipo, linhas_bloco in blocos:
+    for idx_b, (tipo, linhas_bloco) in enumerate(blocos):
         corpo_bloco = "\n".join(linhas_bloco)
+        ini_b = bloco_inis[idx_b]
+        fim_b = bloco_fins[idx_b]
 
         if tipo == "paragrafo":
             # Regra 5: fecha grupo pendente; parágrafo vira trecho próprio
             flush()
             corpos.append(corpo_bloco)
+            corpo_inis.append(ini_b)
+            corpo_fins.append(fim_b)
         else:
             # tipo == "inciso" ou "alinea": agrupamento guloso (regras 3 e nova)
             if not acum_linhas:
                 # Primeiro bloco do grupo: sempre entra (mesmo que ultrapasse limite_grupo)
                 acum_linhas.extend(linhas_bloco)
                 acum_len = len(corpo_bloco)
+                acum_ini = ini_b
+                acum_fim = fim_b
             else:
                 novo_len = acum_len + 1 + len(corpo_bloco)  # +1 pelo "\n" separador
                 if novo_len <= limite_grupo:
                     # Cabe: junta no grupo atual
                     acum_linhas.extend(linhas_bloco)
                     acum_len = novo_len
+                    acum_fim = fim_b
                 else:
                     # Não cabe: fecha grupo atual e abre novo com este bloco
                     flush()
                     acum_linhas.extend(linhas_bloco)
                     acum_len = len(corpo_bloco)
+                    acum_ini = ini_b
+                    acum_fim = fim_b
 
     flush()  # fecha eventual grupo de incisos pendente ao final
 
@@ -235,9 +295,20 @@ def dividir_artigo(
     trechos: list[dict] = []
     for i, corpo in enumerate(corpos, start=1):
         texto_trecho = caput + "\n" + corpo
+        ini_raw = corpo_inis[i - 1]
+        fim = corpo_fins[i - 1]
+        # Avança ini até o primeiro caractere não-vazio (as marcas apontam para
+        # o primeiro char não-vazio, não para o início absoluto do bloco)
+        ini = ini_raw + len(corpo) - len(corpo.lstrip())
+        # Calcula paginas do trecho a partir de marcas_pagina do artigo
+        if marcas:
+            paginas_trecho = _paginas_do_trecho(ini, fim, marcas)
+        else:
+            paginas_trecho = artigo["paginas"]
         trechos.append({
-            **artigo,
+            **artigo_base,
             "texto": texto_trecho,
+            "paginas": paginas_trecho,
             "id": f"art-{num_artigo}#{i}",
             "parte": i,
             "total_partes": total,

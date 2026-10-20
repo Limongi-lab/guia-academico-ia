@@ -1,0 +1,252 @@
+
+== ufu-normas-gerais-graduacao
+   início: Art. 1 -> Art. 1º Essas Normas Gerais da Graduação aplicam-se à organização, funcionamento, avaliaçã
+   início: Art. 2 -> Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte t
+   início: Art. 2 -> Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte t
+   trechos: 242 | maior artigo: 216
+   artigos faltando na sequência: [202]
+   artigos fora de ordem: nenhum
+   com marcação residual: nenhum
+   com título/capítulo colado no fim: nenhum (total 0)
+   5 menores (artigo, caracteres): [('123', 42), ('25', 70), ('211', 72), ('216', 73), ('144', 88)]
+   5 maiores (artigo, caracteres): [('85', 1328), ('84', 1371), ('182', 1382), ('92', 1441), ('64', 1506)]
+   total de trechos (após divisão): 242
+   artigos divididos: 5
+   maior trecho (caracteres): 1506
+   trechos > 1.500 chars: 1
+   [a] artigos divididos c/ 2+ págs: 4 | trechos com TODAS as págs do artigo: 3
+   [b] artigos com 1ª marca fora de 'paginas': nenhum (total 0)
+
+--- Art. 2 (páginas [2]) parte 1/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+I – abreviação do tempo de duração de curso: possibilidade prevista no art. 47, § 2º, da Lei
+nº 9.394, de 20 de dezembro de 1996, de o estudante abreviar o tempo de integralização de seu curso
+por meio de exame de suficiência;
+II – adaptação curricular: procedimento pedagógico pelo qual o estudante se adequa às
+alterações curriculares;
+III – ajuste da renovação de matrícula: alteração na solicitação de matrícula do estudante
+para o período letivo seguinte;
+IV – aproveitamento acadêmico: resultado do desempenho obtido nas atividades
+desenvolvidas no componente curricular;
+V – atividade acadêmica: todas as atividades realizadas por estudante ou grupo de
+estudantes constantes no plano de ensino do componente curricular ou no Projeto Pedagógico do Curso -
+PPC;
+
+--- Art. 2 (páginas [2]) parte 2/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+VI – atividades acadêmicas complementares: componentes curriculares de natureza social,
+cultural, artística, científica e tecnológica que possibilitam a complementação da formação do graduando,
+tanto no âmbito do conhecimento de diferentes áreas do saber, quanto no âmbito de sua preparação
+ética, estética e humanística;
+VII – atividades curriculares de extensão: componente curricular que se constitui em
+processo interdisciplinar, político-educacional, cultural, científico, tecnológico, promovendo a interação
+transformadora entre as instituições de ensino superior e os outros setores da sociedade, por meio da
+produção e da aplicação do conhecimento, em articulação permanente com o ensino e a pesquisa;
+
+--- Art. 2 (páginas [2]) parte 3/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+VIII – avaliação: processo contínuo, gradativo e sistemático de acompanhamento da
+aprendizagem realizado, progressivamente, durante o período letivo por meio de atividades acadêmicas
+previstas no Plano de Ensino;
+IX – avaliação de recuperação: atividade acadêmica que oportuniza ao estudante uma nova
+possibilidade de demonstrar a aprendizagem desenvolvida durante o semestre letivo;
+X – avaliação fora de época: avaliação realizada pelo estudante que não compareceu à
+atividade acadêmica avaliativa na data definida pelo professor responsável;
+XI – calendário acadêmico: documento que contém datas e prazos para a efetivação de
+atividades acadêmico-administrativas referentes à graduação, durante o período letivo;
+
+--- Art. 2 (páginas [2]) parte 4/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XII – caso fortuito: evento proveniente de ato humano, imprevisível e inevitável, que
+impede o cumprimento de uma obrigação;
+XIII – Coeficiente de Rendimento Acadêmico - CRA: um dos indicadores de rendimento
+acadêmico cujo cálculo é apresentado nesta Norma;
+XIV – colação de grau: ato oficial, público e obrigatório promovido pela Universidade
+Federal de Uberlândia - UFU, em que é outorgado grau ao estudante que cumpriu todos os requisitos
+estabelecidos para a integralização de curso de graduação da UFU;
+XV – componente curricular: conjunto de atividades acadêmicas diversas e organizadas de
+modo a favorecer a articulação dos conhecimentos e dos saberes constitutivos da formação do estudante;
+
+--- Art. 2 (páginas [2, 3]) parte 5/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XVI – concluinte: estudante cuja integralização curricular poderá ocorrer no período letivo
+em que estiver matriculado;
+XVII – correquisito: condição registrada no PPC em que um componente curricular exige,
+necessariamente, a matrícula em outro, dentro do mesmo período letivo;
+XVIII – crítica de matrícula: procedimento realizado, antes do período de ajuste, para
+apreciar, com base nas Normas Gerais da Graduação e nas normas específicas de cada curso, os pedidos
+de renovação de matrícula;
+XIX – cursos afins: cursos que pertencem a uma mesma área de conhecimento;
+
+XX – dilação de prazo: prorrogação do tempo máximo estipulado no PPC para
+integralização curricular de um curso;
+
+--- Art. 2 (páginas [3]) parte 6/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XXI – disciplina: componente curricular de natureza teórica ou prática, presencial ou a
+distância, cujos conteúdos estão organizados em torno de uma ou mais áreas do conhecimento;
+XXII – disciplina eletiva: componente curricular de livre escolha do estudante, dentre os
+componentes curriculares de graduação da UFU, que não está previsto no PPC como obrigatória ou
+optativa;
+XXIII – disciplina obrigatória: componente curricular considerado indispensável para a
+formação básica ou profissional do estudante, tal como explicitado no PPC;
+XXIV – disciplina optativa: componente curricular considerado complementar à formação
+geral ou profissional, de escolha do estudante, dentre aqueles definidos no PPC;
+
+--- Art. 2 (páginas [3]) parte 7/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XXV – equivalência: semelhança de conteúdo programático e de carga horária entre dois
+ou mais componentes curriculares;
+XXVI – estágio: componente curricular que se configura como um conjunto de atividades
+desenvolvidas no ambiente de exercício profissional, mediante supervisão e orientação e tem como
+objetivos proporcionar a vivência do mundo do trabalho, promover articulação teórico-prática e favorecer
+a reflexão do exercício profissional e seu papel social;
+XXVII – estudante especial: estudante matriculado em componentes curriculares isolados,
+sem vinculação a um curso de graduação;
+XXVIII – exame de suficiência: instrumento de avaliação que permite abreviar o tempo de
+duração do curso de graduação;
+
+--- Art. 2 (páginas [3]) parte 8/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XXIX – ficha de componente curricular: formulário de identificação e descrição do
+componente curricular;
+XXX  – fluxo curricular: organização dos componentes curriculares em períodos letivos
+sucessivos;
+XXXI – força maior: evento decorrente das forças da natureza, previsível ou imprevisível,
+porém inevitável, que impede o cumprimento de uma obrigação;
+XXXII – histórico escolar: documento oficial que contém os dados exigidos pela legislação
+vigente além dos resultados obtidos pelo estudante nos componentes curriculares cursados;
+XXXIII – indicadores de rendimento acadêmico: valores numéricos calculados a partir de
+resultados obtidos em componentes curriculares, utilizados para caracterizar o desempenho acadêmico
+do estudante;
+
+--- Art. 2 (páginas [3]) parte 9/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XXXIV – integralização curricular: cumprimento dos componentes curriculares e requisitos
+estabelecidos pelo PPC para obtenção de grau ou título;
+XXXV – matrícula extemporânea: renovação de matrícula realizada fora do prazo previsto
+no Calendário Acadêmico;
+XXXVI  – Média Geral Acumulada - MGA: um dos indicadores de rendimento acadêmico
+cujo cálculo é apresentado nesta Norma;
+XXXVII  – mobilidade acadêmica: programa que permite ao estudante realizar atividades
+acadêmicas em outra Instituição de Ensino Superior - IES, brasileira ou estrangeira, no âmbito de
+convênios específicos;
+XXXVIII – período letivo especial: período não coincidente com o período letivo regular,
+destinado à realização de atividades de ensino;
+
+--- Art. 2 (páginas [3, 4]) parte 10/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XXXIX – período letivo regular: conjunto de dias previstos no Calendário Acadêmico,
+destinado à realização de atividades de ensino com número de dias letivos determinado por legislação
+superior;
+
+XL – permanência de vínculo: manutenção do vínculo estudantil para conclusão de novo
+grau, modalidade ou habilitação;
+XLI – plano de ensino: documento que contém o planejamento das atividades didáticas e
+avaliativas elaborado pelo professor, referente ao componente curricular ofertado sob sua
+responsabilidade;
+XLIII  – portal do estudante: plataforma que permite, via internet, realizar solicitações e
+obter informações relacionadas ao vínculo acadêmico;
+
+--- Art. 2 (páginas [4]) parte 11/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XLIV  – práticas específicas: componente curricular desenvolvido como projeto ou outra
+modalidade prevista nas Diretrizes Curriculares Nacionais das áreas de conhecimento;
+XLV – pré-requisito: componente curricular, bloco de componentes curriculares ou carga
+horária cursada, cujo estudo, com o necessário aproveitamento, é exigido para a matrícula em novo
+componente curricular ou bloco de componentes curriculares;
+XLVI – processo seletivo: concurso destinado à seleção de candidatos;
+XLVII – projeto pedagógico de curso: documento que contém as diretrizes, os propósitos e
+os procedimentos adotados para a formação em determinada área do conhecimento e,
+consequentemente, para as ações político-pedagógicas do fazer universitário;
+
+--- Art. 2 (páginas [4]) parte 12/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+XLVIII – provável formando: estudante que poderá integralizar o seu curso caso tenha
+aproveitamento nos componentes curriculares nos quais está matriculado;
+XLIX – regime especial de aprendizagem: substituição da presença por um plano de
+atividades;
+L – solicitação de renovação de matrícula: ato pelo qual o estudante solicita matrícula em
+componentes curriculares previstos no fluxo curricular de seu curso, conforme o Calendário Acadêmico;
+LI – trabalho de conclusão de curso: componente curricular orientado em que se investiga
+um tema específico, de modo sistemático, não necessariamente inédito, registrado por escrito ou por
+meio de diferentes linguagens, de modo a revelar revisão bibliográfica, reflexão, interpretação e rigor
+técnico-científico e artístico, quando couber;
+
+--- Art. 2 (páginas [4]) parte 13/13 |  | 
+Art. 2º Para efeito da aplicação das Normas Gerais da Graduação, será adotada a seguinte
+terminologia:
+
+LII – trancamento geral de matrícula: suspensão da matrícula de todos os componentes
+curriculares em determinado período, sem perda de vínculo com a Universidade;
+LIII – trancamento parcial de matrícula: suspensão da matrícula em um componente
+curricular;
+LIV  – transferência facultativa: processo seletivo para preenchimento de vagas ociosas,
+facultado a estudante matriculado em curso de graduação da UFU ou de outra IES;
+LV – vagas iniciais: aquelas destinadas ao primeiro período letivo dos cursos;
+LVI – vagas ociosas: aquelas geradas por óbitos, desistências, transferências,
+desligamentos, abandonos ou jubilamento; e
+LVII – vagas remanescentes: vagas iniciais não preenchidas por candidatos aprovados em
+processo seletivo.
+
+== ufu-normas-estagio
+   início: Art. 1 -> Art. 1º Estágio é o ato educativo escolar supervisionado, desenvolvido no ambiente de trab
+   início: Art. 2 -> Art. 2º O estágio pode ser realizado nos formatos obrigatório ou não obrigatório, conforme
+   início: Art. 3 -> Art. 3º O estudante que tenha vínculo empregatício ou desenvolva atividades de outras natu
+   trechos: 65 | maior artigo: 53
+   artigos faltando na sequência: nenhum
+   artigos fora de ordem: nenhum
+   com marcação residual: nenhum
+   com título/capítulo colado no fim: nenhum (total 0)
+   5 menores (artigo, caracteres): [('5', 76), ('19', 99), ('10', 112), ('50', 125), ('25', 138)]
+   5 maiores (artigo, caracteres): [('45', 1062), ('15', 1067), ('26', 1113), ('16', 1336), ('18', 1711)]
+   total de trechos (após divisão): 65
+   artigos divididos: 2
+   maior trecho (caracteres): 1711
+   trechos > 1.500 chars: 1
+   [a] artigos divididos c/ 2+ págs: 1 | trechos com TODAS as págs do artigo: 0
+   [b] artigos com 1ª marca fora de 'paginas': nenhum (total 0)
+
+== uniube-regimento-geral-2015
+   início: Art. 1 -> Art. 1º Este Regimento Geral disciplina as atividades comuns de organização e funcionament
+   início: Art. 2 -> Art. 2º O ato de matrícula do aluno ou de admissão aos quadros docente e técnico- administ
+   início: Art. 3 -> Art. 3º Para efeito deste Regimento Geral, adotam-se as seguintes definições: I - eixos te
+   trechos: 106 | maior artigo: 79
+   artigos faltando na sequência: nenhum
+   artigos fora de ordem: nenhum
+   com marcação residual: nenhum
+   com título/capítulo colado no fim: nenhum (total 0)
+   5 menores (artigo, caracteres): [('63', 80), ('41', 107), ('72', 108), ('39', 112), ('73', 139)]
+   5 maiores (artigo, caracteres): [('16', 1229), ('65', 1244), ('36', 1266), ('15', 1320), ('11', 1438)]
+   total de trechos (após divisão): 106
+   artigos divididos: 6
+   maior trecho (caracteres): 1438
+   trechos > 1.500 chars: 0
+   [a] artigos divididos c/ 2+ págs: 3 | trechos com TODAS as págs do artigo: 2
+   [b] artigos com 1ª marca fora de 'paginas': nenhum (total 0)
+
+Arquivos em C:\Users\rafae\guia-academico-ia\data\processed\chunks

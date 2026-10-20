@@ -67,6 +67,34 @@ def checar(doc_id: str, artigos: list[dict], trechos: list[dict]) -> None:
     print(f"   maior trecho (caracteres): {maior_trecho}")
     print(f"   trechos > 1.500 chars: {acima_limite}")
 
+    # --- checagem (a): artigos divididos com 2+ páginas onde algum trecho tem TODAS ---
+    divididos_multipagina = [
+        a for a in artigos
+        if a.get("total_partes", 1) > 1 and len(a.get("paginas", [])) >= 2
+    ]
+    trechos_com_todas = sum(
+        1
+        for a in divididos_multipagina
+        for t in trechos
+        if t["artigo"] == a["artigo"] and set(a["paginas"]) <= set(t.get("paginas", []))
+    )
+    print(
+        f"   [a] artigos divididos c/ 2+ págs: {len(divididos_multipagina)}"
+        f" | trechos com TODAS as págs do artigo: {trechos_com_todas}"
+    )
+
+    # --- checagem (b): artigos onde a 1ª marca de página está fora de "paginas" ---
+    fora_da_1a_marca = [
+        a["artigo"]
+        for a in artigos
+        if a.get("marcas_pagina")
+        and a["marcas_pagina"][0][1] not in a.get("paginas", [])
+    ]
+    print(
+        f"   [b] artigos com 1ª marca fora de 'paginas': "
+        f"{fora_da_1a_marca[:20] or 'nenhum'} (total {len(fora_da_1a_marca)})"
+    )
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -114,7 +142,11 @@ def main() -> None:
         if doc_id == args.doc:
             for r in registros:
                 if r["artigo"] in args.mostrar:
-                    print(f"\n--- Art. {r['artigo']} (páginas {r['paginas']}) | {r.get('capitulo', '')} | {r.get('secao', '')}\n{r['texto']}")
+                    print(
+                        f"\n--- Art. {r['artigo']} (páginas {r['paginas']}) "
+                        f"parte {r.get('parte', 1)}/{r.get('total_partes', 1)}"
+                        f" | {r.get('capitulo', '')} | {r.get('secao', '')}\n{r['texto']}"
+                    )
 
     print(f"\nArquivos em {saida}")
 
