@@ -9,6 +9,7 @@ import json
 import re
 from pathlib import Path
 
+from guia.ingestao.divisao import dividir_artigo
 from guia.ingestao.resolucoes import dividir_em_artigos
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -28,7 +29,7 @@ def numero(artigo: str) -> int | None:
     return int(achou.group()) if achou else None
 
 
-def checar(doc_id: str, trechos: list[dict]) -> None:
+def checar(doc_id: str, artigos: list[dict], trechos: list[dict]) -> None:
     for t in trechos[:3]:
         print(f"   início: Art. {t['artigo']} -> {' '.join(t['texto'].split())[:90]}")
     nums = [numero(t["artigo"]) for t in trechos]
@@ -57,6 +58,15 @@ def checar(doc_id: str, trechos: list[dict]) -> None:
     print(f"   5 menores (artigo, caracteres): {menores}")
     print(f"   5 maiores (artigo, caracteres): {maiores}")
 
+    # --- métricas de divisão ---
+    divididos = sum(1 for a in artigos if a.get("total_partes", 1) > 1)
+    maior_trecho = max((len(t["texto"]) for t in trechos), default=0)
+    acima_limite = sum(1 for t in trechos if len(t["texto"]) > 1500)
+    print(f"   total de trechos (após divisão): {len(trechos)}")
+    print(f"   artigos divididos: {divididos}")
+    print(f"   maior trecho (caracteres): {maior_trecho}")
+    print(f"   trechos > 1.500 chars: {acima_limite}")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -70,14 +80,23 @@ def main() -> None:
     for doc_id in DOCUMENTOS:
         fonte = FONTES[doc_id]
         arquivo = RAIZ / "data" / "processed" / fonte["instituicao"] / f"{doc_id}.txt"
-        trechos = dividir_em_artigos(arquivo.read_text(encoding="utf-8"))
+        artigos = dividir_em_artigos(arquivo.read_text(encoding="utf-8"))
+
+        # Divide cada artigo longo em trechos menores e anota total_partes no artigo
+        trechos: list[dict] = []
+        for art in artigos:
+            partes = dividir_artigo(art)
+            # Propaga total_partes de volta ao dict do artigo (para a métrica checar)
+            art["total_partes"] = len(partes)
+            trechos.extend(partes)
 
         print(f"\n== {doc_id}")
-        checar(doc_id, trechos)
+        checar(doc_id, artigos, trechos)
 
         registros = [
             {
-                "id": f"{doc_id}#art-{t['artigo']}",
+                # Usa o id único do trecho (inclui #parte para artigos divididos)
+                "id": f"{doc_id}#{t['id']}",
                 "documento_id": doc_id,
                 "titulo_documento": fonte["titulo"],
                 "instituicao": fonte["instituicao"],
