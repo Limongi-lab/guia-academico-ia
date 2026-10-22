@@ -142,5 +142,41 @@
         "tipo": "pdf",
         "data_ref": "2026",
         "prioridade": 1
+    },
+    {
+        "id": "fagen-gi-tcc-passo-a-passo",
+        "instituicao": "ufu",
+        "titulo": "Passo a passo - matrícula interna em Trabalho de Conclusão de Curso GGI095 (FAGEN)",
+        "url": "http://www.fagen.ufu.br/system/files/conteudo/passo_a_passo_matricula_interna_disciplina_tarbalho_de_conclusao_de_curso_ggi_095_0.pdf",
+        "tipo": "pdf",
+        "data_ref": "A confirmar",
+        "prioridade": 1
+    },
+    {
+        "id": "prograd-estagio-pagina",
+        "instituicao": "ufu",
+        "titulo": "Estágio (página da PROGRAD)",
+        "url": "http://www.prograd.ufu.br/estagio",
+        "tipo": "html",
+        "data_ref": "A confirmar",
+        "prioridade": 1
+    },
+    {
+        "id": "prograd-estagio-externo-pagina",
+        "instituicao": "ufu",
+        "titulo": "Estágio externo (página da PROGRAD)",
+        "url": "http://www.prograd.ufu.br/estagio/externo",
+        "tipo": "html",
+        "data_ref": "A confirmar",
+        "prioridade": 1
+    },
+    {
+        "id": "prograd-guia-academico-2022",
+        "instituicao": "ufu",
+        "titulo": "Guia Acadêmico PROGRAD, 1ª edição (maio/2022) - guia de orientação, não normativo",
+        "url": "http://www.prograd.ufu.br/sites/prograd.ufu.br/files/media/arquivo/guia_academicomaio1ed2022_2.pdf",
+        "tipo": "pdf",
+        "data_ref": "2022-05",
+        "prioridade": 2
     }
 ]

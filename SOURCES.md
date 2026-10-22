@@ -18,6 +18,10 @@ Campos: **Prioridade** indica qual fonte vale quando há conflito (1 = mais conf
 | Projeto Pedagógico do Curso de GI (currículo 2023/1) | GI | A confirmar | https://fagen.ufu.br/system/files/conteudo/projeto_pedagogico_2023-1.pdf | 1 | PDF vigente do PPC; aprovado pela Resolução CONGRAD 92/2023. |
 | Resolução CONGRAD 92/2023 - aprova o PPC de GI (início 2023/1) | GI | 2023-01-16 | http://www.reitoria.ufu.br/Resolucoes/resolucaoCONGRAD-2023-92.pdf | 1 | A confirmar |
 | Passo a passo - matrícula interna em Estágio Obrigatório GGI042 (FAGEN) | GI | A confirmar | http://www.fagen.ufu.br/system/files/conteudo/02_passo_a_passo_matricula_interna_disciplina_estagio_obrigatorio_ggi042.pdf | 1 | A confirmar |
+| Passo a passo - matrícula interna em TCC GGI095 (FAGEN) | GI | A confirmar | http://www.fagen.ufu.br/system/files/conteudo/passo_a_passo_matricula_interna_disciplina_tarbalho_de_conclusao_de_curso_ggi_095_0.pdf | 1 | A confirmar |
+| Estágio (página da PROGRAD) | Todos os cursos | A confirmar | http://www.prograd.ufu.br/estagio | 1 | Página web (HTML) |
+| Estágio externo (página da PROGRAD) | Todos os cursos | A confirmar | http://www.prograd.ufu.br/estagio/externo | 1 | Página web (HTML) |
+| Guia Acadêmico PROGRAD, 1ª ed. (maio/2022) | Todos os cursos | 2022-05 | http://www.prograd.ufu.br/sites/prograd.ufu.br/files/media/arquivo/guia_academicomaio1ed2022_2.pdf | 2 | Guia de orientação, não normativo |
 
 ## UNIUBE (curso: Engenharia de Computação)
 
@@ -34,3 +38,10 @@ Campos: **Prioridade** indica qual fonte vale quando há conflito (1 = mais conf
 
 - Manual do Aluno UNIUBE (2010): muito antigo.
 - Página "Legislação" da UNIUBE: é da área de pesquisa/pós-graduação.
+
+## Descartadas ou adiadas
+
+- **Roteiros de relatório de estágio (.docx)** — adiado: falta extrator de Word.
+- **Formulários .docx em branco** — descartados: sem conteúdo normativo.
+- **PPC 2020-2 e PPC 2013** — descartados: versões superadas pelo PPC 2023/1 (já ingerido).
+- **Páginas de legislação da PROGRAD das Res. 46 e 93** — descartadas: apenas apontam para os PDFs já ingeridos.

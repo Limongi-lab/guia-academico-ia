@@ -1,18 +1,21 @@
-"""Extrai páginas de serviço da FAGEN e grava JSONs em data/processed/paginas/.
+"""Extrai páginas de serviço da FAGEN / PROGRAD e grava JSONs em data/processed/paginas/.
 
 Uso:
     uv run python scripts/extrair_paginas_fagen.py
 
-Para cada fonte de tipo "html" do host fagen.ufu.br em fontes.json
+Para cada fonte de tipo "html" dos hosts fagen.ufu.br ou prograd.ufu.br em fontes.json
 (exceto as de atividades complementares), lê o HTML bruto em data/raw/,
 chama extrair_pagina_fagen com a URL da fonte e grava o resultado em
 data/processed/paginas/<id>.json.
+
+Se extrair_pagina_fagen levantar uma exceção (ex.: layout diferente do Drupal FAGEN),
+imprime o erro e continua sem abortar.
 
 Ao final, lista os anexos cujas URLs ainda NÃO estão em fontes.json,
 para identificar o que falta ingerir.
 
 Decisões:
-- Detecta "atividades complementares" pelo id ou pela URL (substring).
+- Detecta "atividades complementares" pela URL (substring).
 - Compara URLs de anexos sem "www." e sem barra final para decidir se já
   estão em fontes.json (mesma lógica de deduplicação do extrator).
 - Imprime resumo por página: título, atualizado_em, #seções, #chars, #anexos,
@@ -41,11 +44,15 @@ def _chave_url(url: str) -> tuple[str, str]:
     return (host, path)
 
 
-def _e_fagen_html(fonte: dict) -> bool:
+# Hosts aceitos pelo extrator
+_HOSTS_HTML = {"fagen.ufu.br", "prograd.ufu.br"}
+
+
+def _e_html_aceito(fonte: dict) -> bool:
     if fonte.get("tipo") != "html":
         return False
     host = urlparse(fonte.get("url", "")).netloc.lower().removeprefix("www.")
-    return host == "fagen.ufu.br"
+    return host in _HOSTS_HTML
 
 
 def _e_atividades_complementares(fonte: dict) -> bool:
@@ -60,14 +67,14 @@ def main() -> int:
     for f in fontes:
         chaves_fontes.add(_chave_url(f["url"]))
 
-    # Filtra fontes FAGEN HTML, exceto atividades complementares
+    # Filtra fontes HTML aceitas, exceto atividades complementares
     alvos = [
         f for f in fontes
-        if _e_fagen_html(f) and not _e_atividades_complementares(f)
+        if _e_html_aceito(f) and not _e_atividades_complementares(f)
     ]
 
     if not alvos:
-        print("Nenhuma fonte FAGEN HTML (fora atividades complementares) encontrada.")
+        print("Nenhuma fonte HTML de host aceito (fora atividades complementares) encontrada.")
         return 0
 
     SAIDA.mkdir(parents=True, exist_ok=True)
@@ -85,7 +92,12 @@ def main() -> int:
             continue
 
         html = arquivo_html.read_text(encoding="utf-8", errors="replace")
-        dados = extrair_pagina_fagen(html, fonte["url"])
+
+        try:
+            dados = extrair_pagina_fagen(html, fonte["url"])
+        except Exception as exc:  # layout diferente do Drupal FAGEN
+            print(f"[ERRO] {id_} — {type(exc).__name__}: {exc}")
+            continue
 
         # Grava JSON processado
         saida = SAIDA / f"{id_}.json"
