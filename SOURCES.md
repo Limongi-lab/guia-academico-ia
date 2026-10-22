@@ -14,7 +14,10 @@ Campos: **Prioridade** indica qual fonte vale quando há conflito (1 = mais conf
 | Atividades Complementares - quadro FAGEN (PDF) | GI | Revisado em 12/02/2015 | https://www.fagen.ufu.br/system/files/conteudo/atividadescomplementares_revisado_em_12-02-2015_0.pdf | 2 | Versão antiga: códigos GGI, taxas por semestre. Só tabela. |
 | TCC - Gestão da Informação (GGI 095) | GI | Atualizada em 02/06/2026 | https://fagen.ufu.br/servicos/trabalho-de-conclusao-de-curso-0 | 1 | Procedimento e formulários |
 | Estágio Supervisionado - GI (página FAGEN) | GI | A confirmar | https://fagen.ufu.br/servicos/estagio-supervisionado | 1 | A confirmar |
-| Projeto Pedagógico - GI | GI | A confirmar | https://fagen.ufu.br/graduacao/graduacao-modalidade-presencial/gestao-da-informacao/projeto-pedagogico | 1 | A confirmar |
+| Projeto Pedagógico - GI | GI | A confirmar | https://fagen.ufu.br/graduacao/graduacao-modalidade-presencial/gestao-da-informacao/projeto-pedagogico | 1 | Página de índice dos PPCs; o PDF vigente é o de 2023/1 (ver linha abaixo). |
+| Projeto Pedagógico do Curso de GI (currículo 2023/1) | GI | A confirmar | https://fagen.ufu.br/system/files/conteudo/projeto_pedagogico_2023-1.pdf | 1 | PDF vigente do PPC; aprovado pela Resolução CONGRAD 92/2023. |
+| Resolução CONGRAD 92/2023 - aprova o PPC de GI (início 2023/1) | GI | 2023-01-16 | http://www.reitoria.ufu.br/Resolucoes/resolucaoCONGRAD-2023-92.pdf | 1 | A confirmar |
+| Passo a passo - matrícula interna em Estágio Obrigatório GGI042 (FAGEN) | GI | A confirmar | http://www.fagen.ufu.br/system/files/conteudo/02_passo_a_passo_matricula_interna_disciplina_estagio_obrigatorio_ggi042.pdf | 1 | A confirmar |
 
 ## UNIUBE (curso: Engenharia de Computação)
 
