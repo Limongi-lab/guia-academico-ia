@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 
 from guia.ingestao.divisao import dividir_artigo
+from guia.ingestao.procedimentos import dividir_passos
 from guia.ingestao.resolucoes import dividir_em_artigos
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -18,6 +19,10 @@ DOCUMENTOS = [
     "ufu-normas-gerais-graduacao",
     "ufu-normas-estagio",
     "uniube-regimento-geral-2015",
+]
+PROCEDIMENTOS = [
+    "fagen-gi-estagio-passo-a-passo",
+    "fagen-gi-tcc-passo-a-passo",
 ]
 MARCAS = ("(Redação dada", "(Revogado", "(Incluído", "(Vide", "SEI/UFU", "sei.ufu.br")
 TITULO_COLADO = re.compile(r"^\s*(t[íi]tulo|cap[íi]tulo|se[çc][ãa]o|subse[çc][ãa]o)\b", re.I | re.M)
@@ -149,6 +154,47 @@ def main() -> None:
                     )
 
     print(f"\nArquivos em {saida}")
+
+    # --- Documentos de procedimento (passo a passo) ---
+    for doc_id in PROCEDIMENTOS:
+        fonte = FONTES.get(doc_id)
+        if fonte is None:
+            print(f"\n[AVISO] {doc_id} não encontrado em fontes.json, pulando.")
+            continue
+        arquivo = RAIZ / "data" / "processed" / fonte["instituicao"] / f"{doc_id}.txt"
+        if not arquivo.exists():
+            print(f"\n[AVISO] {arquivo} não existe, pulando.")
+            continue
+
+        passos = dividir_passos(arquivo.read_text(encoding="utf-8"))
+
+        print(f"\n== {doc_id} (procedimento)")
+        print(f"   passos: {len(passos)}")
+
+        # Sanidade: passos fora de sequencia
+        numeros = [p["passo"] for p in passos]
+        fora_seq = [n for a, n in zip(numeros, numeros[1:]) if n != a + 1]
+        print(f"   fora de sequencia: {fora_seq or 'nenhum'}")
+
+        # Sanidade: passos com texto curto
+        curtos = [(p["passo"], len(p["texto"])) for p in passos if len(p["texto"]) < 40]
+        print(f"   passos com < 40 chars: {curtos or 'nenhum'}")
+
+        registros = [
+            {
+                "id": f"{doc_id}#passo-{p['passo']}",
+                "pai_id": doc_id,
+                "passo": p["passo"],
+                "ator": p["ator"],
+                "texto": p["texto"],
+                "paginas": p["paginas"],
+                "titulo_doc": p["titulo_doc"],
+            }
+            for p in passos
+        ]
+        with (saida / f"{doc_id}.jsonl").open("w", encoding="utf-8") as f:
+            for r in registros:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 
 if __name__ == "__main__":

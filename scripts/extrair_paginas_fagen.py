@@ -35,6 +35,29 @@ SAIDA = RAIZ / "data" / "processed" / "paginas"
 sys.path.insert(0, str(RAIZ / "src"))
 from guia.ingestao.pagina_fagen import extrair_pagina_fagen  # noqa: E402
 
+# Extensões de imagem a ignorar na lista de candidatos
+_EXT_IMAGEM = {".svg", ".png", ".jpg", ".jpeg", ".gif"}
+# Domínios de redes sociais a ignorar
+_DOMINIOS_SOCIAIS = {"instagram.com", "youtube.com", "facebook.com"}
+
+
+def _ignorar_candidato(url: str, base_url: str | None) -> bool:
+    """Retorna True se a URL candidata deve ser omitida da lista final."""
+    p = urlparse(url)
+    # Âncora interna: sem host E path vazio ou igual ao da página base
+    if not p.netloc:
+        if not p.path or (base_url and p.path == urlparse(base_url).path):
+            return True
+    # Extensão de imagem
+    ext = "." + p.path.rsplit(".", 1)[-1].lower() if "." in p.path.split("/")[-1] else ""
+    if ext in _EXT_IMAGEM:
+        return True
+    # Rede social
+    host = p.netloc.lower().removeprefix("www.")
+    if any(host == d or host.endswith("." + d) for d in _DOMINIOS_SOCIAIS):
+        return True
+    return False
+
 
 def _chave_url(url: str) -> tuple[str, str]:
     """(host sem www., path sem barra final) — mesmo critério do extrator."""
@@ -122,8 +145,9 @@ def main() -> int:
         for anx in dados["anexos"]:
             chave = _chave_url(anx["url"])
             if chave not in chaves_fontes and chave not in vistos_anexos:
-                vistos_anexos.add(chave)
-                anexos_novos.append(anx)
+                if not _ignorar_candidato(anx["url"], fonte.get("url")):
+                    vistos_anexos.add(chave)
+                    anexos_novos.append(anx)
 
     # Lista de anexos que ainda não estão em fontes.json
     if anexos_novos:
