@@ -21,6 +21,9 @@ Campos: **Prioridade** indica qual fonte vale quando há conflito (1 = mais conf
 | Passo a passo - matrícula interna em TCC GGI095 (FAGEN) | GI | A confirmar | http://www.fagen.ufu.br/system/files/conteudo/passo_a_passo_matricula_interna_disciplina_tarbalho_de_conclusao_de_curso_ggi_095_0.pdf | 1 | A confirmar |
 | Estágio (página da PROGRAD) | Todos os cursos | A confirmar | http://www.prograd.ufu.br/estagio | 1 | Página web (HTML) |
 | Estágio externo (página da PROGRAD) | Todos os cursos | A confirmar | http://www.prograd.ufu.br/estagio/externo | 1 | Página web (HTML) |
+| Estágio Interno na UFU - Obrigatório (página da PROGRAD) | Todos os cursos | A confirmar | https://prograd.ufu.br/estagio/internoobrigatorio | 1 | Página web (HTML) |
+| Estágio Interno na UFU - Não Obrigatório (página da PROGRAD) | Todos os cursos | A confirmar | https://prograd.ufu.br/estagio/internonaoobrigatorio | 1 | Página web (HTML) |
+| Estágio das Licenciaturas (página da PROGRAD) | Todos os cursos | A confirmar | https://prograd.ufu.br/estagio/licenciatura | 1 | Página web (HTML) |
 | Guia Acadêmico PROGRAD, 1ª ed. (maio/2022) | Todos os cursos | 2022-05 | http://www.prograd.ufu.br/sites/prograd.ufu.br/files/media/arquivo/guia_academicomaio1ed2022_2.pdf | 2 | Guia de orientação, não normativo |
 
 ## UNIUBE (curso: Engenharia de Computação)

@@ -178,5 +178,32 @@
         "tipo": "pdf",
         "data_ref": "2022-05",
         "prioridade": 2
+    },
+    {
+        "id": "prograd-estagio-interno-obrigatorio",
+        "instituicao": "ufu",
+        "titulo": "Estágio Interno na UFU - Obrigatório (página da PROGRAD)",
+        "url": "https://prograd.ufu.br/estagio/internoobrigatorio",
+        "tipo": "html",
+        "data_ref": "A confirmar",
+        "prioridade": 1
+    },
+    {
+        "id": "prograd-estagio-interno-nao-obrigatorio",
+        "instituicao": "ufu",
+        "titulo": "Estágio Interno na UFU - Não Obrigatório (página da PROGRAD)",
+        "url": "https://prograd.ufu.br/estagio/internonaoobrigatorio",
+        "tipo": "html",
+        "data_ref": "A confirmar",
+        "prioridade": 1
+    },
+    {
+        "id": "prograd-estagio-licenciatura",
+        "instituicao": "ufu",
+        "titulo": "Estágio das Licenciaturas (página da PROGRAD)",
+        "url": "https://prograd.ufu.br/estagio/licenciatura",
+        "tipo": "html",
+        "data_ref": "A confirmar",
+        "prioridade": 1
     }
 ]

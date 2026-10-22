@@ -217,18 +217,40 @@ def _extrair_contato(doc) -> dict | None:
 # ---------------------------------------------------------------------------
 
 _DATA_RE = re.compile(r"(\d{2})/(\d{2})/(\d{4})")
+_DATA_ISO_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})")
+
+
+def _meta_content(doc, property_name: str) -> str | None:
+    """Retorna o conteúdo de <meta property="…"> ou None."""
+    for m in doc.cssselect(f'meta[property="{property_name}"]'):
+        return m.get("content") or None
+    return None
+
+
+def _data_de_meta(doc, *properties: str) -> str | None:
+    """Tenta cada property em ordem; retorna AAAA-MM-DD ou None."""
+    for prop in properties:
+        valor = _meta_content(doc, prop)
+        if valor:
+            m = _DATA_ISO_RE.match(valor)
+            if m:
+                return m.group(1)
+    return None
 
 
 def _extrair_datas(doc) -> tuple[str | None, str | None]:
     campo = doc.cssselect("div.field-name-autor-publicacao-alteracao")
-    if not campo:
-        return None, None
-    texto = " ".join(campo[0].itertext())
-    datas = _DATA_RE.findall(texto)
-    def _fmt(t):
-        return f"{t[2]}-{t[1]}-{t[0]}"
-    publicado = _fmt(datas[0]) if len(datas) > 0 else None
-    atualizado = _fmt(datas[1]) if len(datas) > 1 else None
+    if campo:
+        texto = " ".join(campo[0].itertext())
+        datas = _DATA_RE.findall(texto)
+        def _fmt(t):
+            return f"{t[2]}-{t[1]}-{t[0]}"
+        publicado = _fmt(datas[0]) if len(datas) > 0 else None
+        atualizado = _fmt(datas[1]) if len(datas) > 1 else None
+        return publicado, atualizado
+    # Fallback: meta tags (bloco visível ausente)
+    atualizado = _data_de_meta(doc, "article:modified_time", "og:updated_time")
+    publicado = _data_de_meta(doc, "article:published_time")
     return publicado, atualizado
 
 
