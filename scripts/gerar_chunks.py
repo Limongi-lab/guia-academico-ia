@@ -12,6 +12,11 @@ from pathlib import Path
 from guia.ingestao.divisao import dividir_artigo
 from guia.ingestao.procedimentos import dividir_passos
 from guia.ingestao.resolucoes import dividir_em_artigos
+from guia.ingestao.trechos import (
+    montar_trecho_artigo,
+    montar_trecho_passo,
+    montar_trechos_pagina,
+)
 
 RAIZ = Path(__file__).resolve().parent.parent
 FONTES = {f["id"]: f for f in json.loads((RAIZ / "fontes.json").read_text(encoding="utf-8"))}
@@ -109,6 +114,10 @@ def main() -> None:
 
     saida = RAIZ / "data" / "processed" / "chunks"
     saida.mkdir(parents=True, exist_ok=True)
+    saida_trechos = RAIZ / "data" / "processed" / "trechos"
+    saida_trechos.mkdir(parents=True, exist_ok=True)
+
+    todos_trechos: list[dict] = []  # para sanidade final
 
     for doc_id in DOCUMENTOS:
         fonte = FONTES[doc_id]
@@ -142,6 +151,13 @@ def main() -> None:
         ]
         with (saida / f"{doc_id}.jsonl").open("w", encoding="utf-8") as f:
             for r in registros:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+        # --- Trechos unificados (novo formato) ---
+        trechos_unif = [montar_trecho_artigo(t, fonte) for t in trechos]
+        todos_trechos.extend(trechos_unif)
+        with (saida_trechos / f"{doc_id}.jsonl").open("w", encoding="utf-8") as f:
+            for r in trechos_unif:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
         if doc_id == args.doc:
@@ -195,6 +211,64 @@ def main() -> None:
         with (saida / f"{doc_id}.jsonl").open("w", encoding="utf-8") as f:
             for r in registros:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+        # --- Trechos unificados ---
+        trechos_unif = [montar_trecho_passo(p, fonte) for p in passos]
+        todos_trechos.extend(trechos_unif)
+        with (saida_trechos / f"{doc_id}.jsonl").open("w", encoding="utf-8") as f:
+            for r in trechos_unif:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    # --- Páginas HTML ---
+    dir_paginas = RAIZ / "data" / "processed" / "paginas"
+    for arq in sorted(dir_paginas.glob("*.json")):
+        doc_id = arq.stem
+        fonte = FONTES.get(doc_id)
+        if fonte is None:
+            print(f"\n[AVISO] {doc_id} nao encontrado em fontes.json, pulando.")
+            continue
+        pagina = json.loads(arq.read_text(encoding="utf-8"))
+        trechos_pag = montar_trechos_pagina(pagina, fonte)
+        todos_trechos.extend(trechos_pag)
+        with (saida_trechos / f"{doc_id}.jsonl").open("w", encoding="utf-8") as f:
+            for r in trechos_pag:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        print(f"\n== {doc_id} (pagina): {len(trechos_pag)} trechos")
+
+    print(f"\nArquivos de trechos unificados em {saida_trechos}")
+
+    # --- Checagens de sanidade finais ---
+    print("\n=== SANIDADE ===")
+
+    # Total por tipo_doc
+    from collections import Counter
+    contagem = Counter(t["tipo_doc"] for t in todos_trechos)
+    print("Total de trechos por tipo_doc:")
+    for tipo, n in sorted(contagem.items()):
+        print(f"  {tipo}: {n}")
+
+    # IDs duplicados
+    ids = [t["id"] for t in todos_trechos]
+    from collections import Counter as Ctr
+    dups = [tid for tid, cnt in Ctr(ids).items() if cnt > 1]
+    print(f"IDs duplicados: {dups or 'nenhum'}")
+
+    # Trechos com citacao vazia
+    sem_cit = [t["id"] for t in todos_trechos if not t.get("citacao")]
+    print(f"Trechos com citacao vazia: {sem_cit or 'nenhum'}")
+
+    # Trechos > 1500 chars por tipo_doc
+    acima = Counter(t["tipo_doc"] for t in todos_trechos if len(t["texto"]) > 1500)
+    print("Trechos > 1500 chars por tipo_doc:")
+    for tipo, n in sorted(acima.items()):
+        print(f"  {tipo}: {n}")
+    if not acima:
+        print("  nenhum")
+
+    # Documentos de fontes.json sem trechos
+    ids_com_trechos = {t["doc_id"] for t in todos_trechos}
+    sem_trechos = [f["id"] for f in FONTES.values() if f["id"] not in ids_com_trechos]
+    print(f"Docs sem trechos ainda: {sem_trechos or 'nenhum'}")
 
 
 if __name__ == "__main__":
