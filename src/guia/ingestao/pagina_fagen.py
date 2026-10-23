@@ -12,7 +12,7 @@ Chaves do dict retornado:
     assunto         (list[str])
     secoes          (list[{"titulo": str, "texto": str}])  – ordem de página
     anexos          (list[{"texto": str, "url": str, "tipo": str}])
-    contato         ({"setor", "email", "telefone", "ramal"} ou None)
+    contato         ({"setor", "email", "telefone", "ramal"[, "endereco", "horario"]} ou None)
 
 Decisões de implementação:
 - Usamos lxml.html.document_fromstring (reconhece HTML5 malformado).
@@ -22,12 +22,18 @@ Decisões de implementação:
 - Conversão para texto: <p> e <li> geram blocos; <br> vira \n; NBSP normalizado;
   parágrafos vazios descartados; blocos separados por linha em branco (\n\n).
 - Listas: cada <li> vira linha começando com "- ".
-- Anexos: coletados de todos os campos de texto + tabela field-name-field-anexo;
-  ignorados mailto:, tel:, #, whatsapp:; tornados absolutos com urljoin;
-  deduplicados por (host sem "www.", path), mantendo a primeira ocorrência.
+- Anexos: coletados de todos os campos de texto + field-name-field-legislacao +
+  tabela field-name-field-anexo; ignorados mailto:, tel:, #, whatsapp:; tornados absolutos
+  com urljoin; deduplicados por (host sem "www.", path), mantendo a primeira ocorrência.
 - Tipo de anexo: extensão do path ou "pagina".
-- Contato: extraído do campo field-name-field-unidade-superior.
+- Contato: extraído de field-name-field-unidade-superior OU field-name-field-uorg-superior.
 - Título: apenas de div.field-name-title h1; ausente → ValueError.
+- Taxonomia: usa texto de cada <a> dentro de field-item se houver links; caso contrário,
+  itertext do item inteiro.
+- Legislações (field-name-field-legislacao) viram seção "- texto" por link;
+  título da seção vem de field-name-rotulo-legislacao (fallback: "Legislações").
+- Contato: telefones extraídos por regex (?:\\+\\d{2}\\s)?\\d{2}\\s\\d{4,5}-\\d{4},
+  juntos por " / "; endereco e horario adicionados quando encontrados.
 """
 
 import re
@@ -49,8 +55,14 @@ _CLASSE_BODY = "field-name-body"
 _CAMPO_TAXONOMIA = {
     "field-name-field-publico-alvo": "publico_alvo",
     "field-name-field-curso": "curso",
+    # assunto: tenta field-name-field-assunto primeiro, depois field-name-field-categoria-servico
     "field-name-field-assunto": "assunto",
 }
+_CAMPO_ASSUNTO_FALLBACK = "field-name-field-categoria-servico"
+_CAMPO_LEGISLACAO = "field-name-field-legislacao"
+_CAMPO_ROTULO_LEGISLACAO = "field-name-rotulo-legislacao"
+_CAMPOS_CONTATO = ("field-name-field-unidade-superior", "field-name-field-uorg-superior")
+_TELEFONE_RE = re.compile(r"(?:\+\d{2}\s)?\d{2}\s\d{4,5}-\d{4}")
 
 
 # ---------------------------------------------------------------------------
@@ -177,39 +189,85 @@ def _processar_links(
 # Extração de contato
 # ---------------------------------------------------------------------------
 
+def _texto_itertext(el) -> str:
+    """Junta pedaços de itertext com espaço (evita que texto de elementos adjacentes grude)."""
+    return _normalizar_espaco(" ".join(el.itertext()))
+
+
 def _extrair_contato(doc) -> dict | None:
-    campo = doc.cssselect("div.field-name-field-unidade-superior")
-    if not campo:
+    # Aceita field-name-field-unidade-superior OU field-name-field-uorg-superior
+    bloco = None
+    for classe in _CAMPOS_CONTATO:
+        campos = doc.cssselect(f"div.{classe}")
+        if campos:
+            bloco = campos[0]
+            break
+    if bloco is None:
         return None
-    bloco = campo[0]
 
+    # Setor: texto do primeiro <a> dentro de h4; fallback: primeiro <a> qualquer
     setor = ""
-    titulo_emb = bloco.cssselect("div.field-name-title a")
-    if titulo_emb:
-        setor = _normalizar_espaco("".join(titulo_emb[0].itertext()))
+    h4_links = bloco.cssselect("h4 a")
+    if h4_links:
+        setor = _normalizar_espaco("".join(h4_links[0].itertext()))
+    else:
+        links_geral = bloco.cssselect("div.field-name-title a")
+        if links_geral:
+            setor = _normalizar_espaco("".join(links_geral[0].itertext()))
 
-    email = telefone = ramal = ""
-    info = bloco.cssselect("div.field-name-info-contato-2")
-    if info:
-        for div in info[0].cssselect("div"):
-            texto_div = _normalizar_espaco("".join(div.itertext()))
-            if "@" in texto_div and not email:
-                m = re.search(r"[\w.+-]+@[\w.-]+\.\w+", texto_div)
-                if m:
-                    email = m.group(0)
-            elif re.search(r"\+\d", texto_div) and not telefone:
-                m = re.search(r"[\+\d][\d\s\-]+", texto_div)
-                if m:
-                    telefone = m.group(0).strip()
-            elif "Ramal" in texto_div and not ramal:
-                m = re.search(r"Ramal[:\s]+(\d+)", texto_div, re.IGNORECASE)
-                if m:
-                    ramal = m.group(1)
+    # E-mail
+    email = ""
+    email_divs = bloco.cssselect("div.field-name-field-email div.field-item")
+    if email_divs:
+        email = _normalizar_espaco("".join(email_divs[0].itertext()))
+    else:
+        # fallback: procura em info-contato-2
+        info = bloco.cssselect("div.field-name-info-contato-2")
+        if info:
+            for div in info[0].cssselect("div"):
+                texto_div = _texto_itertext(div)
+                if "@" in texto_div and not email:
+                    m = re.search(r"[\w.+-]+@[\w.-]+\.\w+", texto_div)
+                    if m:
+                        email = m.group(0)
+
+    # Telefones: todas as ocorrências do padrão, unidas por " / "
+    texto_bloco = _texto_itertext(bloco)
+    fones = _TELEFONE_RE.findall(texto_bloco)
+    telefone: str | None = " / ".join(fones) if fones else None
+
+    # Ramal (mantido por compatibilidade com FAGEN)
+    ramal: str | None = None
+    m_ramal = re.search(r"Ramal[:\s]+(\d+)", texto_bloco, re.IGNORECASE)
+    if m_ramal:
+        ramal = m_ramal.group(1)
 
     if not setor and not email:
         return None
 
-    return {"setor": setor, "email": email, "telefone": telefone, "ramal": ramal}
+    contato: dict = {"setor": setor, "email": email, "telefone": telefone, "ramal": ramal}
+
+    # Endereço (field-name-endereco + field-name-campus-cep)
+    partes_end: list[str] = []
+    for classe_end in ("field-name-endereco", "field-name-campus-cep"):
+        divs_end = bloco.cssselect(f"div.{classe_end} div.field-item")
+        if divs_end:
+            t = _normalizar_espaco("".join(divs_end[0].itertext()))
+            if t:
+                partes_end.append(t)
+    if partes_end:
+        contato["endereco"] = " - ".join(partes_end)
+
+    # Horário de atendimento
+    horario_divs = bloco.cssselect(
+        "div.field-name-field-horario-de-atendimento div.field-item"
+    )
+    if horario_divs:
+        h = _normalizar_espaco("".join(horario_divs[0].itertext()))
+        if h:
+            contato["horario"] = h
+
+    return contato
 
 
 # ---------------------------------------------------------------------------
@@ -258,6 +316,27 @@ def _extrair_datas(doc) -> tuple[str | None, str | None]:
 # Extração de taxonomia
 # ---------------------------------------------------------------------------
 
+def _valores_taxonomia(items) -> list[str]:
+    """Extrai valores de uma lista de field-items.
+
+    Se o item contiver <a>, retorna o texto de cada link separadamente;
+    caso contrário, retorna o itertext do item como um único valor.
+    """
+    valores: list[str] = []
+    for item in items:
+        links = item.cssselect("a")
+        if links:
+            for a in links:
+                t = _normalizar_espaco("".join(a.itertext()))
+                if t:
+                    valores.append(t)
+        else:
+            t = _normalizar_espaco("".join(item.itertext()))
+            if t:
+                valores.append(t)
+    return valores
+
+
 def _extrair_taxonomia(doc) -> dict[str, list[str]]:
     resultado: dict[str, list[str]] = {k: [] for k in _CAMPO_TAXONOMIA.values()}
     for classe, chave in _CAMPO_TAXONOMIA.items():
@@ -265,7 +344,13 @@ def _extrair_taxonomia(doc) -> dict[str, list[str]]:
         if not campos:
             continue
         items = campos[0].cssselect("div.field-item")
-        resultado[chave] = [_normalizar_espaco("".join(i.itertext())) for i in items]
+        resultado[chave] = _valores_taxonomia(items)
+    # Fallback para assunto: tenta field-name-field-categoria-servico se vazio
+    if not resultado["assunto"]:
+        campos = doc.cssselect(f"div.{_CAMPO_ASSUNTO_FALLBACK}")
+        if campos:
+            items = campos[0].cssselect("div.field-item")
+            resultado["assunto"] = _valores_taxonomia(items)
     return resultado
 
 
@@ -304,20 +389,49 @@ def extrair_pagina_fagen(html: str, url: str | None = None) -> dict:
     # 4. Taxonomia
     taxonomia = _extrair_taxonomia(doc)
 
-    # 5. Seções + coleta de anexos dos campos de texto
+    # 5. Seções (campos de texto + legislações) em ordem de documento + coleta de anexos
     secoes: list[dict] = []
     vistos_anexos: dict[tuple, dict] = {}
     todos_anexos: list[dict] = []
 
-    campos_texto = doc.xpath(
+    # Seleciona campos de texto E campo de legislação, todos em ordem de documento
+    campos_relevantes = doc.xpath(
         "//div[contains(@class,'field-type-text-long') or "
-        "contains(@class,'field-type-text-with-summary')]"
+        "contains(@class,'field-type-text-with-summary') or "
+        f"contains(@class,'{_CAMPO_LEGISLACAO}')]"
     )
 
-    for campo in campos_texto:
+    for campo in campos_relevantes:
         classes = set((campo.get("class") or "").split())
 
-        # Rótulo: body não tem; demais têm div.field-label
+        # Campo de legislações → vira seção com linhas "- <texto do link>"
+        if _CAMPO_LEGISLACAO in classes:
+            # Título da seção: vem de field-name-rotulo-legislacao ou "Legislações"
+            rotulo_leg = "Legislações"
+            rotulo_divs = doc.cssselect(f"div.{_CAMPO_ROTULO_LEGISLACAO} div.field-item")
+            if rotulo_divs:
+                t = _normalizar_espaco("".join(rotulo_divs[0].itertext()))
+                if t:
+                    rotulo_leg = t
+
+            linhas: list[str] = []
+            for a in campo.cssselect("a[href]"):
+                texto_link = _normalizar_espaco("".join(a.itertext()))
+                if texto_link:
+                    linhas.append(f"- {texto_link}")
+
+            if linhas:
+                secoes.append({"titulo": rotulo_leg, "texto": "\n".join(linhas)})
+
+            # Links de legislação também vão para os anexos
+            novos = _processar_links(_links_de_elem(campo), url, vistos_anexos)
+            todos_anexos.extend(novos)
+            continue
+
+        # Campo de texto comum
+        if _CAMPO_LEGISLACAO in classes:
+            continue  # já tratado acima (redundante, mas seguro)
+
         rotulo = ""
         if _CLASSE_BODY not in classes:
             labels = campo.cssselect("div.field-label")

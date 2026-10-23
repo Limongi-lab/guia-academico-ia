@@ -140,6 +140,14 @@ def main() -> int:
             f"     anexos:      {len(dados['anexos'])}\n"
             f"     tem_contato: {tem_contato}\n"
         )
+        if tem_contato:
+            c = dados["contato"]
+            print(
+                f"     contato:\n"
+                f"       setor:    {c['setor']}\n"
+                f"       email:    {c['email']}\n"
+                f"       telefone: {c['telefone']}\n"
+            )
 
         # Coleta anexos novos (não em fontes.json)
         for anx in dados["anexos"]:
