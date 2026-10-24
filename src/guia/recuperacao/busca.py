@@ -3,6 +3,7 @@ from typing import Any
 
 import psycopg
 from psycopg.rows import dict_row
+from pgvector import Vector
 
 
 def buscar_vetorial(
@@ -31,5 +32,5 @@ def buscar_vetorial(
         LIMIT %(k)s
     """
     with conn.cursor(row_factory=dict_row) as cur:
-        cur.execute(sql, {"vetor": vetor, "k": k, "instituicao": instituicao})
+        cur.execute(sql, {"vetor": Vector(vetor), "k": k, "instituicao": instituicao})
         return cur.fetchall()
