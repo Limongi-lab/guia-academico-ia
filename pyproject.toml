@@ -11,6 +11,8 @@ dependencies = [
     "cssselect>=1.6.0",
     "fastapi>=0.143.1",
     "httpx>=0.28.1",
+    "pgvector>=0.5.1",
+    "psycopg[binary]>=3.3.6",
     "pydantic>=2.14.1",
     "pymupdf>=1.28.2",
     "trafilatura>=2.3.1",
@@ -23,6 +25,9 @@ guia = "guia:main"
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+markers = ["integracao: testes que exigem o banco PostgreSQL do Docker (guia-db)"]
 
 [dependency-groups]
 dev = [
