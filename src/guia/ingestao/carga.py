@@ -1,7 +1,7 @@
 """Ingestão de documentos e trechos no banco guia (carga idempotente com embeddings)."""
 import hashlib
-import json
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import psycopg
 from psycopg.types.json import Jsonb
@@ -69,6 +69,19 @@ def ingerir_documento(
         for inicio in range(0, len(textos_para_embed), lote):
             fatia = textos_para_embed[inicio : inicio + lote]
             vetores.extend(embedder(fatia))  # pode lançar exceção → aborta tudo
+
+    # Valida o que o embedder devolveu ANTES de abrir a transacao
+    if len(vetores) != len(precisa_embed):
+        raise ValueError(
+            f"O embedder devolveu {len(vetores)} vetor(es) "
+            f"para {len(precisa_embed)} texto(s) solicitados."
+        )
+    for k, v in enumerate(vetores):
+        if len(v) != DIMENSAO:
+            raise ValueError(
+                f"Vetor {k} retornado pelo embedder tem dimensao {len(v)}, "
+                f"esperado {DIMENSAO}."
+            )
 
     # Mapa índice-em-precisa_embed → vetor
     novo_vetor: dict[int, list[float]] = {precisa_embed[k]: vetores[k] for k in range(len(vetores))}
