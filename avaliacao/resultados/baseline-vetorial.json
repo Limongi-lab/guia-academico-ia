@@ -1,0 +1,85 @@
+{
+  "rotulo": "baseline-vetorial",
+  "n_perguntas": 8,
+  "n_avaliadas": 6,
+  "n_recusa": 1,
+  "pendentes": [
+    "q005"
+  ],
+  "hit_doc": {
+    "1": 0.8333333333333334,
+    "3": 0.8333333333333334,
+    "5": 1.0,
+    "10": 1.0
+  },
+  "mrr_doc": 0.875,
+  "n_com_detalhe": 5,
+  "hit_trecho": {
+    "1": 0.6,
+    "3": 0.6,
+    "5": 0.6,
+    "10": 1.0
+  },
+  "por_pergunta": [
+    {
+      "id": "q001",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.24944853782653809
+    },
+    {
+      "id": "q002",
+      "tipo": "procedimento",
+      "rank_doc": 4,
+      "rank_trecho": 6,
+      "distancia_top1": 0.27581270192937135
+    },
+    {
+      "id": "q003",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2399652600288391
+    },
+    {
+      "id": "q004",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.48549593855404094
+    },
+    {
+      "id": "q020",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 6,
+      "distancia_top1": 0.3336230913884366
+    },
+    {
+      "id": "q021",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3505698248913829
+    },
+    {
+      "id": "q022",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.40396714210510254
+    }
+  ],
+  "distancias": {
+    "aplicaveis": {
+      "min": 0.2399652600288391,
+      "max": 0.40396714210510254
+    },
+    "recusa": {
+      "min": 0.48549593855404094,
+      "max": 0.48549593855404094
+    },
+    "separavel": true
+  }
+}
