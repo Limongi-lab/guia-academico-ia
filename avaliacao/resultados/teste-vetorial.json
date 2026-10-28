@@ -1,0 +1,279 @@
+{
+  "rotulo": "teste-vetorial",
+  "n_perguntas": 35,
+  "n_avaliadas": 30,
+  "n_recusa": 5,
+  "pendentes": [],
+  "hit_doc": {
+    "1": 0.7666666666666667,
+    "3": 0.9333333333333333,
+    "5": 0.9666666666666667,
+    "10": 1.0
+  },
+  "mrr_doc": 0.8527777777777779,
+  "n_com_detalhe": 30,
+  "hit_trecho": {
+    "1": 0.6,
+    "3": 0.7,
+    "5": 0.7,
+    "10": 0.7333333333333333
+  },
+  "por_pergunta": [
+    {
+      "id": "q100",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2682402511906695
+    },
+    {
+      "id": "q101",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.30102709832868246
+    },
+    {
+      "id": "q102",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3047981651067184
+    },
+    {
+      "id": "q103",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.40355467796325684
+    },
+    {
+      "id": "q104",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3759988918305093
+    },
+    {
+      "id": "q105",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2823418164951147
+    },
+    {
+      "id": "q106",
+      "tipo": "inconsistencia_fonte",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3421253961958106
+    },
+    {
+      "id": "q107",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2808869266774331
+    },
+    {
+      "id": "q108",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.36307915229076937
+    },
+    {
+      "id": "q109",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3890042304992676
+    },
+    {
+      "id": "q110",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3369158908028461
+    },
+    {
+      "id": "q111",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3936556577682495
+    },
+    {
+      "id": "q112",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.41764819622039795
+    },
+    {
+      "id": "q113",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.35923186783600525
+    },
+    {
+      "id": "q114",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.4210541326750037
+    },
+    {
+      "id": "q115",
+      "tipo": "resposta_direta",
+      "rank_doc": 3,
+      "rank_trecho": null,
+      "distancia_top1": 0.3382868363515287
+    },
+    {
+      "id": "q116",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.35580037104488493
+    },
+    {
+      "id": "q117",
+      "tipo": "resposta_direta",
+      "rank_doc": 2,
+      "rank_trecho": 2,
+      "distancia_top1": 0.3327068090438843
+    },
+    {
+      "id": "q118",
+      "tipo": "resposta_direta",
+      "rank_doc": 2,
+      "rank_trecho": 10,
+      "distancia_top1": 0.3521647033495019
+    },
+    {
+      "id": "q119",
+      "tipo": "resposta_direta",
+      "rank_doc": 2,
+      "rank_trecho": null,
+      "distancia_top1": 0.24158717641754013
+    },
+    {
+      "id": "q120",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.25523146924597395
+    },
+    {
+      "id": "q121",
+      "tipo": "procedimento",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.30024049580813905
+    },
+    {
+      "id": "q122",
+      "tipo": "procedimento",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.29854152496282804
+    },
+    {
+      "id": "q123",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 2,
+      "distancia_top1": 0.325752476625218
+    },
+    {
+      "id": "q124",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 2,
+      "distancia_top1": 0.40728228179004744
+    },
+    {
+      "id": "q125",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.33235629393793786
+    },
+    {
+      "id": "q126",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2351228366828807
+    },
+    {
+      "id": "q127",
+      "tipo": "procedimento",
+      "rank_doc": 4,
+      "rank_trecho": null,
+      "distancia_top1": 0.33234010137141023
+    },
+    {
+      "id": "q128",
+      "tipo": "resposta_direta",
+      "rank_doc": 6,
+      "rank_trecho": null,
+      "distancia_top1": 0.2800818205001654
+    },
+    {
+      "id": "q129",
+      "tipo": "resposta_direta",
+      "rank_doc": 3,
+      "rank_trecho": null,
+      "distancia_top1": 0.2819267465406724
+    },
+    {
+      "id": "q130",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.3306555149545233
+    },
+    {
+      "id": "q131",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.33031195402145386
+    },
+    {
+      "id": "q132",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.32128123406413867
+    },
+    {
+      "id": "q133",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.40113274458446313
+    },
+    {
+      "id": "q134",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.4466745954759035
+    }
+  ],
+  "distancias": {
+    "aplicaveis": {
+      "min": 0.2351228366828807,
+      "max": 0.4210541326750037
+    },
+    "recusa": {
+      "min": 0.32128123406413867,
+      "max": 0.4466745954759035
+    },
+    "separavel": false
+  }
+}
