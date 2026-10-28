@@ -1,10 +1,21 @@
+import argparse
 import json
 import sys
 from collections import Counter
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-caminho = Path("avaliacao/perguntas.jsonl")
+
+parser = argparse.ArgumentParser(description="Valida o arquivo de perguntas JSONL.")
+parser.add_argument(
+    "caminho",
+    nargs="?",
+    default="avaliacao/perguntas.jsonl",
+    help="Caminho para o arquivo de perguntas (padrão: avaliacao/perguntas.jsonl).",
+)
+args = parser.parse_args()
+
+caminho = Path(args.caminho)
 ids, tipos = set(), Counter()
 for n, linha in enumerate(caminho.read_text(encoding="utf-8").splitlines(), 1):
     if not linha.strip():
@@ -22,6 +33,8 @@ for n, linha in enumerate(caminho.read_text(encoding="utf-8").splitlines(), 1):
         print(f"linha {n}: id repetido {item.get('id')}")
     ids.add(item.get("id"))
     tipos[item.get("tipo")] += 1
-    if item.get("tipo") != "recusa" and not (item.get("resposta_esperada") and item.get("fonte_esperada")):
+    if item.get("tipo") != "recusa" and not (
+        item.get("resposta_esperada") and item.get("fonte_esperada")
+    ):
         print(f"linha {n}: falta resposta_esperada ou fonte_esperada")
 print(f"{len(ids)} perguntas | por tipo: {dict(tipos)}")
