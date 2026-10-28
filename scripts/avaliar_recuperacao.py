@@ -1,7 +1,8 @@
-"""Avalia a qualidade da recuperação vetorial do guia-acadêmico.
+"""Avalia a qualidade da recuperação do guia-acadêmico (vetorial, textual ou híbrida).
 
 Uso:
     uv run python scripts/avaliar_recuperacao.py [--rotulo ROTULO] [--profundidade K]
+                                                  [--busca {vetorial,textual,hibrida}]
     uv run python scripts/avaliar_recuperacao.py --comparar A.json B.json
 
 Modo normal:
@@ -128,8 +129,8 @@ def _modo_comparar(caminho_a: str, caminho_b: str) -> None:
 # Modo normal
 # ---------------------------------------------------------------------------
 
-def _modo_normal(rotulo: str, profundidade: int) -> None:
-    """Avalia a recuperação vetorial e salva o resultado."""
+def _modo_normal(rotulo: str, profundidade: int, busca: str) -> None:
+    """Avalia a recuperação e salva o resultado."""
     # Importações pesadas apenas no modo que precisa delas
     from guia.banco import conectar
     from guia.embeddings import carregar_bge_m3, criar_embedder
@@ -138,7 +139,7 @@ def _modo_normal(rotulo: str, profundidade: int) -> None:
         carregar_perguntas,
         salvar_resultado,
     )
-    from guia.recuperacao.busca import buscar_vetorial
+    from guia.recuperacao.busca import buscar_hibrida, buscar_textual, buscar_vetorial
 
     # Carrega ids de fontes.json
     fontes: list[dict] = json.loads(FONTES_PATH.read_text(encoding="utf-8"))
@@ -160,10 +161,22 @@ def _modo_normal(rotulo: str, profundidade: int) -> None:
     embedder = criar_embedder(modelo)
     print("  Modelo pronto.")
 
-    # Função de busca: embeda a pergunta e chama buscar_vetorial sem filtro de instituição
-    def buscar(pergunta: str, k: int) -> list[dict]:
-        vetor = embedder([pergunta])[0]
-        return buscar_vetorial(conn, vetor, k=k, instituicao=None)
+    # Função de busca conforme o modo escolhido
+    if busca == "vetorial":
+        # Comportamento original: embeda e chama buscar_vetorial
+        def buscar(pergunta: str, k: int) -> list[dict]:
+            vetor = embedder([pergunta])[0]
+            return buscar_vetorial(conn, vetor, k=k, instituicao=None)
+    elif busca == "textual":
+        # Embeda para calcular distância e chama buscar_textual
+        def buscar(pergunta: str, k: int) -> list[dict]:
+            vetor = embedder([pergunta])[0]
+            return buscar_textual(conn, pergunta, k, vetor=vetor)
+    else:  # hibrida
+        # Embeda e chama buscar_hibrida
+        def buscar(pergunta: str, k: int) -> list[dict]:
+            vetor = embedder([pergunta])[0]
+            return buscar_hibrida(conn, vetor, pergunta, k=profundidade)
 
     # Avalia
     print(f"\nAvaliando (profundidade={profundidade})...")
@@ -211,12 +224,18 @@ def main() -> None:
         metavar=("A", "B"),
         help="Compara dois arquivos de resultado JSON e imprime o delta.",
     )
+    parser.add_argument(
+        "--busca",
+        choices=["vetorial", "textual", "hibrida"],
+        default="vetorial",
+        help="Estratégia de busca: vetorial (padrão), textual ou hibrida.",
+    )
     args = parser.parse_args()
 
     if args.comparar:
         _modo_comparar(args.comparar[0], args.comparar[1])
     else:
-        _modo_normal(args.rotulo, args.profundidade)
+        _modo_normal(args.rotulo, args.profundidade, args.busca)
 
 
 if __name__ == "__main__":
