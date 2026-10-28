@@ -184,3 +184,64 @@ def buscar_hibrida(
             item["distancia"] = float("nan")
 
     return fusao
+
+
+def deduplicar_por_pai(
+    resultados: list[dict[str, Any]],
+    k: int | None = None,
+) -> list[dict[str, Any]]:
+    """Agrupa trechos pelo pai_id, mantendo só o melhor de cada grupo.
+
+    Percorre `resultados` (melhor primeiro) e mantém a PRIMEIRA ocorrência de
+    cada pai_id. Trechos sem pai_id (ausente ou None) formam cada um o seu
+    próprio grupo, identificado pelo campo "id".
+
+    Cada dict devolvido é uma CÓPIA da primeira ocorrência do grupo com o campo
+    extra "ids_irmaos": lista com os "id" de TODOS os membros do grupo, na
+    ordem em que aparecem em `resultados` (inclui o próprio). O corte `k` é
+    aplicado DEPOIS de agrupar. A lista de entrada não é alterada.
+    """
+    # grupos acumulados: chave_grupo -> índice no resultado de saída
+    indice_grupo: dict[str, int] = {}
+    saida: list[dict[str, Any]] = []
+
+    for item in resultados:
+        # Trechos sem pai_id formam grupo próprio identificado pelo id
+        pai = item.get("pai_id") or None
+        chave = pai if pai is not None else item["id"]
+
+        if chave in indice_grupo:
+            # Grupo já existe: apenas acrescenta o irmão
+            saida[indice_grupo[chave]]["ids_irmaos"].append(item["id"])
+        else:
+            # Primeira ocorrência: cria entrada no resultado
+            indice_grupo[chave] = len(saida)
+            entrada = dict(item)          # cópia rasa — não altera a lista original
+            entrada["ids_irmaos"] = [item["id"]]
+            saida.append(entrada)
+
+    if k is not None:
+        saida = saida[:k]
+    return saida
+
+
+def buscar_vetorial_por_artigo(
+    conn: psycopg.Connection,
+    vetor: list[float],
+    k: int = 5,
+    instituicao: str | None = None,
+    k_candidatos: int = 30,
+) -> list[dict[str, Any]]:
+    """Busca vetorial agrupada por artigo (pai_id).
+
+    Busca k_candidatos trechos com buscar_vetorial (mesmo filtro de
+    instituição), agrupa pelo pai_id com deduplicar_por_pai e devolve até k
+    artigos. Pode retornar MENOS de k se os candidatos forem esgotados por
+    trechos irmãos do mesmo artigo. A "distancia" de cada artigo é a do seu
+    melhor trecho (primeiro na lista, pois buscar_vetorial retorna ordem
+    crescente de distância).
+    """
+    # Busca trechos candidatos — pode haver menos artigos distintos
+    candidatos = buscar_vetorial(conn, vetor, k=k_candidatos, instituicao=instituicao)
+    # Agrupa e corta em k artigos
+    return deduplicar_por_pai(candidatos, k=k)

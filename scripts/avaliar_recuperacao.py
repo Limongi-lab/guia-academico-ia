@@ -143,6 +143,32 @@ def _modo_comparar(caminho_a: str, caminho_b: str) -> None:
 # Modo normal
 # ---------------------------------------------------------------------------
 
+def _instituicao_por_pergunta(
+    perguntas: list[dict],
+    fontes: list[dict],
+) -> dict[str, str | None]:
+    """Devolve um dict {pergunta_id -> instituicao} para --instituicao-da-fonte.
+
+    Para cada pergunta que não seja recusa, extrai o doc_id do primeiro token
+    de fonte_esperada (antes de vírgula ou espaço) e busca a instituição
+    correspondente em fontes.json. Perguntas de recusa ficam mapeadas para None
+    (sem filtro). Doc_ids não encontrados em fontes.json também ficam None.
+    """
+    # Índice doc_id -> instituicao
+    idx = {f["id"]: f["instituicao"] for f in fontes}
+
+    mapa: dict[str, str | None] = {}
+    for p in perguntas:
+        if p.get("tipo") == "recusa":
+            mapa[p["id"]] = None
+            continue
+        fonte = p.get("fonte_esperada") or ""
+        # O doc_id é tudo antes da primeira vírgula ou espaço
+        doc_id = fonte.split(",")[0].split()[0] if fonte else ""
+        mapa[p["id"]] = idx.get(doc_id)
+    return mapa
+
+
 def _modo_normal(
     rotulo: str,
     profundidade: int,
@@ -150,6 +176,8 @@ def _modo_normal(
     perguntas_path: Path,
     rrf_k: int,
     k_candidatos: int,
+    agrupar_artigo: bool,
+    instituicao_da_fonte: bool,
 ) -> None:
     """Avalia a recuperação e salva o resultado."""
     # Importações pesadas apenas no modo que precisa delas
@@ -160,9 +188,14 @@ def _modo_normal(
         carregar_perguntas,
         salvar_resultado,
     )
-    from guia.recuperacao.busca import buscar_hibrida, buscar_textual, buscar_vetorial
+    from guia.recuperacao.busca import (
+        buscar_hibrida,
+        buscar_textual,
+        buscar_vetorial,
+        buscar_vetorial_por_artigo,
+    )
 
-    # Carrega ids de fontes.json
+    # Carrega ids e mapa de instituições de fontes.json
     fontes: list[dict] = json.loads(FONTES_PATH.read_text(encoding="utf-8"))
     ids_docs = {f["id"] for f in fontes}
 
@@ -182,12 +215,32 @@ def _modo_normal(
     embedder = criar_embedder(modelo)
     print("  Modelo pronto.")
 
-    # Função de busca conforme o modo escolhido
-    if busca == "vetorial":
-        # Comportamento original: embeda e chama buscar_vetorial
+    # Mapa texto_da_pergunta -> instituicao (usado apenas com --instituicao-da-fonte).
+    # avaliar_recuperacao chama buscar(pergunta_texto, k), então indexamos pelo texto.
+    inst_por_texto: dict[str, str | None] = {}
+    if instituicao_da_fonte:
+        inst_por_id = _instituicao_por_pergunta(perguntas, fontes)
+        inst_por_texto = {p["pergunta"]: inst_por_id[p["id"]] for p in perguntas}
+        n_inst = sum(1 for v in inst_por_id.values() if v)
+        print(f"  Filtro de instituição ativo: {n_inst}/{len(perguntas)} perguntas com filtro.")
+
+    # Função de busca conforme o modo e as opções escolhidas
+    if busca == "vetorial" and agrupar_artigo:
+        # Vetorial agrupada por artigo, com filtro de instituição opcional
         def buscar(pergunta: str, k: int) -> list[dict]:
             vetor = embedder([pergunta])[0]
-            return buscar_vetorial(conn, vetor, k=k, instituicao=None)
+            inst = inst_por_texto.get(pergunta) if instituicao_da_fonte else None
+            return buscar_vetorial_por_artigo(
+                conn, vetor, k=k, instituicao=inst, k_candidatos=k_candidatos
+            )
+
+    elif busca == "vetorial":
+        # Comportamento original: embeda e chama buscar_vetorial;
+        # com --instituicao-da-fonte usa o filtro por pergunta
+        def buscar(pergunta: str, k: int) -> list[dict]:
+            vetor = embedder([pergunta])[0]
+            inst = inst_por_texto.get(pergunta) if instituicao_da_fonte else None
+            return buscar_vetorial(conn, vetor, k=k, instituicao=inst)
 
     elif busca == "textual":
         # Embeda para calcular distância e chama buscar_textual
@@ -409,6 +462,24 @@ def main() -> None:
             "e imprime tabela compacta."
         ),
     )
+    parser.add_argument(
+        "--agrupar-artigo",
+        action="store_true",
+        dest="agrupar_artigo",
+        help=(
+            "Usa buscar_vetorial_por_artigo: deduplica trechos por pai_id antes de "
+            "devolver resultados (vale para --busca vetorial)."
+        ),
+    )
+    parser.add_argument(
+        "--instituicao-da-fonte",
+        action="store_true",
+        dest="instituicao_da_fonte",
+        help=(
+            "Filtra a busca vetorial pela instituição do primeiro documento citado "
+            "em fonte_esperada de cada pergunta (simula perfil do usuário no app)."
+        ),
+    )
     args = parser.parse_args()
 
     perguntas_path = Path(args.perguntas)
@@ -425,6 +496,8 @@ def main() -> None:
             perguntas_path,
             args.rrf_k,
             args.k_candidatos,
+            args.agrupar_artigo,
+            args.instituicao_da_fonte,
         )
 
 
