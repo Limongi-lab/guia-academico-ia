@@ -49,7 +49,9 @@ _VARREDURA_K_CAND = (10, 20, 50)
 # Helpers de impressão
 # ---------------------------------------------------------------------------
 
-def _imprimir_resumo(resultado: dict, rotulo: str) -> None:
+def _imprimir_resumo(
+    resultado: dict, rotulo: str, nota_distancias: str | None = None
+) -> None:
     """Imprime o resumo formatado de um resultado de avaliação."""
     n_av = resultado["n_avaliadas"]
     n_rec = resultado["n_recusa"]
@@ -98,6 +100,8 @@ def _imprimir_resumo(resultado: dict, rotulo: str) -> None:
     sep = d["separavel"]
     print()
     print("── Distâncias (top-1) ──")
+    if nota_distancias:
+        print(f"  Nota: {nota_distancias}")
     apl_min = f"{apl['min']:.4f}" if apl["min"] is not None else "None"
     apl_max = f"{apl['max']:.4f}" if apl["max"] is not None else "None"
     rec_min = f"{rec['min']:.4f}" if rec["min"] is not None else "None"
@@ -185,6 +189,7 @@ def _modo_normal(
     rerank: bool,
 ) -> None:
     """Avalia a recuperação e salva o resultado."""
+    t_inicio = time.monotonic()
     # Importações pesadas apenas no modo que precisa delas
     from guia.banco import conectar
     from guia.embeddings import carregar_bge_m3, criar_embedder
@@ -255,7 +260,11 @@ def _modo_normal(
                 s = res["score_rerank"]
                 # Aplica sigmoid se o score estiver fora de [0, 1]
                 if s < 0 or s > 1:
-                    s = 1.0 / (1.0 + math.exp(-s))
+                    if s >= 0:
+                        s = 1.0 / (1.0 + math.exp(-s))
+                    else:
+                        exp_s = math.exp(s)
+                        s = exp_s / (1.0 + exp_s)
                 res["distancia"] = 1.0 - s
             return resultados
 
@@ -316,9 +325,15 @@ def _modo_normal(
     print(f"Resultado salvo em {destino}")
 
     # Imprime resumo
-    _imprimir_resumo(resultado, rotulo)
+    _imprimir_resumo(
+        resultado,
+        rotulo,
+        nota_distancias="distâncias = 1 − score do reranker" if usar_rerank else None,
+    )
 
     conn.close()
+    tempo_total = time.monotonic() - t_inicio
+    print(f"Tempo total de execução: {tempo_total:.1f}s")
 
 
 # ---------------------------------------------------------------------------
