@@ -5,6 +5,8 @@ Uso:
                                                   [--busca {vetorial,textual,hibrida}]
                                                   [--perguntas CAMINHO]
                                                   [--rrf-k INT] [--k-candidatos INT]
+                                                  [--agrupar-artigo] [--instituicao-da-fonte]
+                                                  [--rerank]
     uv run python scripts/avaliar_recuperacao.py --comparar A.json B.json
     uv run python scripts/avaliar_recuperacao.py --varredura
 
@@ -25,7 +27,9 @@ Modo --varredura:
 """
 import argparse
 import json
+import math
 import sys
+import time
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -178,6 +182,7 @@ def _modo_normal(
     k_candidatos: int,
     agrupar_artigo: bool,
     instituicao_da_fonte: bool,
+    rerank: bool,
 ) -> None:
     """Avalia a recuperação e salva o resultado."""
     # Importações pesadas apenas no modo que precisa delas
@@ -189,6 +194,7 @@ def _modo_normal(
         salvar_resultado,
     )
     from guia.recuperacao.busca import (
+        buscar_com_rerank,
         buscar_hibrida,
         buscar_textual,
         buscar_vetorial,
@@ -215,6 +221,16 @@ def _modo_normal(
     embedder = criar_embedder(modelo)
     print("  Modelo pronto.")
 
+    # Carrega o reranker UMA vez (apenas com --rerank)
+    reranker = None
+    usar_rerank = rerank and busca == "vetorial"
+    if usar_rerank:
+        from guia.reranking import carregar_bge_reranker, criar_reranker
+        print("Carregando reranker BGE-Reranker-v2-M3...")
+        modelo_reranker = carregar_bge_reranker()
+        reranker = criar_reranker(modelo_reranker)
+        print("  Reranker pronto.")
+
     # Mapa texto_da_pergunta -> instituicao (usado apenas com --instituicao-da-fonte).
     # avaliar_recuperacao chama buscar(pergunta_texto, k), então indexamos pelo texto.
     inst_por_texto: dict[str, str | None] = {}
@@ -225,7 +241,25 @@ def _modo_normal(
         print(f"  Filtro de instituição ativo: {n_inst}/{len(perguntas)} perguntas com filtro.")
 
     # Função de busca conforme o modo e as opções escolhidas
-    if busca == "vetorial" and agrupar_artigo:
+    if usar_rerank:
+        # Reranking vetorial com sigmoid quando score fora de [0,1]
+        def buscar(pergunta: str, k: int) -> list[dict]:
+            vetor = embedder([pergunta])[0]
+            inst = inst_por_texto.get(pergunta) if instituicao_da_fonte else None
+            resultados = buscar_com_rerank(
+                conn, vetor, pergunta, reranker,
+                k=k, instituicao=inst, k_candidatos=k_candidatos,
+            )
+            # Converte score_rerank em "distancia" = 1 - sigmoid(score) se necessário
+            for res in resultados:
+                s = res["score_rerank"]
+                # Aplica sigmoid se o score estiver fora de [0, 1]
+                if s < 0 or s > 1:
+                    s = 1.0 / (1.0 + math.exp(-s))
+                res["distancia"] = 1.0 - s
+            return resultados
+
+    elif busca == "vetorial" and agrupar_artigo:
         # Vetorial agrupada por artigo, com filtro de instituição opcional
         def buscar(pergunta: str, k: int) -> list[dict]:
             vetor = embedder([pergunta])[0]
@@ -263,6 +297,9 @@ def _modo_normal(
 
     # Avalia
     print(f"\nAvaliando (profundidade={profundidade})...")
+    if usar_rerank:
+        print("  Nota: distâncias = 1 − score do reranker (com sigmoid se score fora de [0,1]).")
+    t0 = time.monotonic()
     resultado = avaliar_recuperacao(
         perguntas,
         buscar,
@@ -270,6 +307,8 @@ def _modo_normal(
         ks=(1, 3, 5, 10),
         profundidade=profundidade,
     )
+    elapsed = time.monotonic() - t0
+    print(f"  Tempo total de avaliação: {elapsed:.1f}s")
 
     # Salva
     destino = DIR_RESULTADOS / f"{rotulo}.json"
@@ -480,6 +519,15 @@ def main() -> None:
             "em fonte_esperada de cada pergunta (simula perfil do usuário no app)."
         ),
     )
+    parser.add_argument(
+        "--rerank",
+        action="store_true",
+        help=(
+            "Aplica reranking com BGE-Reranker-v2-M3 após a busca vetorial "
+            "(vale para --busca vetorial; combina com --instituicao-da-fonte). "
+            "O reranker é carregado UMA vez. distâncias = 1 − score do reranker."
+        ),
+    )
     args = parser.parse_args()
 
     perguntas_path = Path(args.perguntas)
@@ -498,6 +546,7 @@ def main() -> None:
             args.k_candidatos,
             args.agrupar_artigo,
             args.instituicao_da_fonte,
+            args.rerank,
         )
 
 

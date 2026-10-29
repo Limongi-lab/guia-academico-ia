@@ -245,3 +245,73 @@ def buscar_vetorial_por_artigo(
     candidatos = buscar_vetorial(conn, vetor, k=k_candidatos, instituicao=instituicao)
     # Agrupa e corta em k artigos
     return deduplicar_por_pai(candidatos, k=k)
+
+
+def reordenar_por_score(
+    candidatos: list[dict[str, Any]],
+    scores: list[float],
+    k: int | None = None,
+) -> list[dict[str, Any]]:
+    """Reordena candidatos por score de reranking, decrescente (função pura).
+
+    Cada dict devolvido é uma cópia do candidato original com o campo extra
+    "score_rerank". Empates mantêm a ordem de entrada (sort estável). O corte
+    `k` é aplicado após a ordenação. A lista de entrada não é alterada.
+    Levanta ValueError se len(scores) != len(candidatos).
+    """
+    if len(scores) != len(candidatos):
+        raise ValueError(
+            f"scores tem {len(scores)} elementos, candidatos tem {len(candidatos)}."
+        )
+
+    # Enumera para garantir estabilidade no empate (índice original como desempate)
+    indexados = list(enumerate(zip(candidatos, scores)))
+    indexados.sort(key=lambda x: (-x[1][1], x[0]))  # score desc, índice asc
+
+    saida: list[dict[str, Any]] = []
+    for _idx, (cand, score) in indexados:
+        entrada = dict(cand)          # cópia rasa — não altera a lista original
+        entrada["score_rerank"] = score
+        saida.append(entrada)
+
+    if k is not None:
+        saida = saida[:k]
+    return saida
+
+
+def buscar_com_rerank(
+    conn: psycopg.Connection,
+    vetor: list[float],
+    pergunta: str,
+    reranker: Any,
+    k: int = 5,
+    instituicao: str | None = None,
+    k_candidatos: int = 30,
+) -> list[dict[str, Any]]:
+    """Busca vetorial seguida de reranking com cross-encoder.
+
+    Fluxo:
+      1. Busca k_candidatos trechos com buscar_vetorial (filtro de instituição).
+      2. Se não houver candidatos, devolve [] sem chamar o reranker.
+      3. Chama reranker(pergunta, textos) UMA vez, na ordem vetorial.
+      4. Cada resultado recebe "rank_vetorial" (posição 1-based na busca vetorial)
+         e "score_rerank"; "distancia" original é preservada.
+      5. Reordena por score decrescente e devolve até k resultados.
+    """
+    # Passo 1: candidatos na ordem vetorial
+    candidatos = buscar_vetorial(conn, vetor, k=k_candidatos, instituicao=instituicao)
+
+    # Passo 2: lista vazia — não chama o reranker
+    if not candidatos:
+        return []
+
+    # Anota posição vetorial antes de reordenar
+    for pos_0, cand in enumerate(candidatos):
+        cand["rank_vetorial"] = pos_0 + 1  # 1-based
+
+    # Passo 3: uma única chamada ao reranker na ordem vetorial
+    textos = [c["texto"] for c in candidatos]
+    scores = reranker(pergunta, textos)
+
+    # Passo 4-5: reordena e corta
+    return reordenar_por_score(candidatos, scores, k=k)
