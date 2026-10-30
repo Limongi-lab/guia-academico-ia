@@ -1,0 +1,309 @@
+{
+  "rotulo": "dev-inst-rerank-c10",
+  "n_perguntas": 40,
+  "n_avaliadas": 32,
+  "n_recusa": 7,
+  "pendentes": [
+    "q005"
+  ],
+  "hit_doc": {
+    "1": 0.96875,
+    "3": 1.0,
+    "5": 1.0,
+    "10": 1.0
+  },
+  "mrr_doc": 0.984375,
+  "n_com_detalhe": 31,
+  "hit_trecho": {
+    "1": 0.7096774193548387,
+    "3": 0.8709677419354839,
+    "5": 0.9032258064516129,
+    "10": 0.9032258064516129
+  },
+  "por_pergunta": [
+    {
+      "id": "q001",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.00025469064712524414
+    },
+    {
+      "id": "q002",
+      "tipo": "procedimento",
+      "rank_doc": 2,
+      "rank_trecho": 2,
+      "distancia_top1": 0.131544291973114
+    },
+    {
+      "id": "q003",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.0008987188339233398
+    },
+    {
+      "id": "q004",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.9978193989954889
+    },
+    {
+      "id": "q020",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.06608223915100098
+    },
+    {
+      "id": "q021",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 2,
+      "distancia_top1": 0.41844481229782104
+    },
+    {
+      "id": "q022",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.027173161506652832
+    },
+    {
+      "id": "q030",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 2,
+      "distancia_top1": 0.010933637619018555
+    },
+    {
+      "id": "q031",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 4,
+      "distancia_top1": 0.08639687299728394
+    },
+    {
+      "id": "q032",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 2,
+      "distancia_top1": 0.03145533800125122
+    },
+    {
+      "id": "q033",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2962679862976074
+    },
+    {
+      "id": "q034",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.18262243270874023
+    },
+    {
+      "id": "q035",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.08615928888320923
+    },
+    {
+      "id": "q036",
+      "tipo": "procedimento",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.030802249908447266
+    },
+    {
+      "id": "q037",
+      "tipo": "procedimento",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.323882520198822
+    },
+    {
+      "id": "q038",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.001221001148223877
+    },
+    {
+      "id": "q039",
+      "tipo": "procedimento",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.32311224937438965
+    },
+    {
+      "id": "q040",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.2651985287666321
+    },
+    {
+      "id": "q041",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 3,
+      "distancia_top1": 0.24553269147872925
+    },
+    {
+      "id": "q042",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.0007360577583312988
+    },
+    {
+      "id": "q043",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.0912361741065979
+    },
+    {
+      "id": "q044",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.0014734268188476562
+    },
+    {
+      "id": "q045",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.023078501224517822
+    },
+    {
+      "id": "q046",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": null,
+      "distancia_top1": 0.02347743511199951
+    },
+    {
+      "id": "q047",
+      "tipo": "vigencia",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.05113232135772705
+    },
+    {
+      "id": "q048",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.007325947284698486
+    },
+    {
+      "id": "q049",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.01110750436782837
+    },
+    {
+      "id": "q050",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.03696697950363159
+    },
+    {
+      "id": "q051",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.3307760953903198
+    },
+    {
+      "id": "q052",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.021813929080963135
+    },
+    {
+      "id": "q053",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.00018042325973510742
+    },
+    {
+      "id": "q054",
+      "tipo": "resposta_direta",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.0919421911239624
+    },
+    {
+      "id": "q055",
+      "tipo": "inconsistencia_fonte",
+      "rank_doc": 1,
+      "rank_trecho": 1,
+      "distancia_top1": 0.003013789653778076
+    },
+    {
+      "id": "q056",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.001562654972076416
+    },
+    {
+      "id": "q057",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.9859726522117853
+    },
+    {
+      "id": "q058",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.3427113890647888
+    },
+    {
+      "id": "q059",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.15225642919540405
+    },
+    {
+      "id": "q060",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.954525139182806
+    },
+    {
+      "id": "q061",
+      "tipo": "recusa",
+      "rank_doc": null,
+      "rank_trecho": null,
+      "distancia_top1": 0.4227710962295532
+    }
+  ],
+  "distancias": {
+    "aplicaveis": {
+      "min": 0.00018042325973510742,
+      "max": 0.41844481229782104
+    },
+    "recusa": {
+      "min": 0.001562654972076416,
+      "max": 0.9978193989954889
+    },
+    "separavel": false
+  }
+}
