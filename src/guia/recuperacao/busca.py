@@ -326,30 +326,15 @@ def buscar_com_rerank_por_artigo(
     instituicao: str | None = None,
     k_candidatos: int = 30,
 ) -> list[dict[str, Any]]:
-    """Busca vetorial seguida de reranking agrupado por artigo.
-
-    Em vez de pontuar cada trecho isoladamente no cross-encoder, agrupa os trechos
-    candidatos pelo artigo (pai_id) para documentos do tipo 'resolucao'.
-    Para cada resolução presente nos candidatos, busca todos os seus trechos
-    irmãos no banco em uma única consulta parametrizada (ORDER BY parte, id),
-    monta o texto consolidado do artigo com juntar_trechos_irmaos e pontua o
-    artigo inteiro no reranker.
-    Cada artigo é representado pelo seu primeiro trecho candidato retornado pela
-    busca vetorial, preservando sua distancia original e seu rank_vetorial.
-    Para os demais tipos de documento, cada trecho é mantido como unidade própria.
-    """
     from guia.geracao import juntar_trechos_irmaos
 
-    # Passo 1: busca os trechos candidatos
     candidatos = buscar_vetorial(conn, vetor, k=k_candidatos, instituicao=instituicao)
     if not candidatos:
         return []
 
-    # Anota a posição vetorial de cada candidato (1-based)
     for pos_0, cand in enumerate(candidatos):
         cand["rank_vetorial"] = pos_0 + 1
 
-    # Agrupa em unidades na ordem da primeira aparição
     representantes: list[dict[str, Any]] = []
     chaves: list[tuple[str, str]] = []
     seen: set[tuple[str, str]] = set()
@@ -367,10 +352,8 @@ def buscar_com_rerank_por_artigo(
             chaves.append(chave)
             representantes.append(cand)
 
-    # Identifica pai_ids de resolução para buscar todos os irmãos no banco
     pais_resolucao = [ident for tipo_chave, ident in chaves if tipo_chave == "resolucao"]
 
-    # Busca irmãos em uma única consulta parametrizada
     irmaos_por_pai: dict[str, list[str]] = {}
     if pais_resolucao:
         sql = """
@@ -386,7 +369,6 @@ def buscar_com_rerank_por_artigo(
                 if p_id:
                     irmaos_por_pai.setdefault(p_id, []).append(linha["texto"])
 
-    # Monta o texto de cada unidade para ser avaliado pelo reranker
     textos_unidade: list[str] = []
     for (tipo_chave, ident), rep in zip(chaves, representantes):
         if tipo_chave == "resolucao" and ident in irmaos_por_pai:
@@ -394,6 +376,5 @@ def buscar_com_rerank_por_artigo(
         else:
             textos_unidade.append(rep["texto"])
 
-    # Pontua as unidades com o reranker e reordena os representantes
     scores = reranker(pergunta, textos_unidade)
     return reordenar_por_score(representantes, scores, k=k)

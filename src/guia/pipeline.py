@@ -33,8 +33,7 @@ def perguntar(
 
     Passos:
       1. Gera o embedding da pergunta com o embedder.
-      2. Executa busca vetorial filtrada e reranking com o reranker
-         (agrupando por artigo antes do rerank se agrupar_antes_do_rerank for True).
+      2. Executa busca vetorial filtrada e reranking com o reranker.
       3. Monta blocos de contexto consolidados por artigo.
       4. Gera a resposta com o LLM e valida citações/recusa.
 
