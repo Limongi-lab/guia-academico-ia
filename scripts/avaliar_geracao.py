@@ -45,7 +45,13 @@ def _instituicao_por_pergunta(
     return mapa
 
 
-def _imprimir_relatorio(resultado: dict, rotulo: str, modelo: str) -> None:
+def _imprimir_relatorio(
+    resultado: dict,
+    rotulo: str,
+    modelo: str,
+    max_artigos: int = 3,
+    agrupar: bool = False,
+) -> None:
     """Imprime o relatório consolidado da avaliação de geração."""
     print(f"\n{'=' * 65}")
     print(f"Avaliação da Geração: {rotulo} (modelo: {modelo})")
@@ -56,6 +62,7 @@ def _imprimir_relatorio(resultado: dict, rotulo: str, modelo: str) -> None:
     n_pend = len(resultado["pendentes"])
     n_err = resultado["n_erros"]
     print(f"Perguntas : total={n_perg}  avaliadas={n_av}  pendentes={n_pend}  erros={n_err}")
+    print(f"Config    : max_artigos={max_artigos}  agrupar={agrupar}")
     if resultado["erros"]:
         print(f"  Erros: {', '.join(resultado['erros'])}")
 
@@ -175,6 +182,20 @@ def main() -> None:
         default=0.0,
         help="Segundos de pausa entre perguntas (padrão: 0).",
     )
+    parser.add_argument(
+        "--max-artigos",
+        type=int,
+        default=3,
+        dest="max_artigos",
+        help="Número máximo de artigos consolidados no contexto (padrão: 3).",
+    )
+    parser.add_argument(
+        "--agrupar-artigo",
+        action="store_true",
+        default=False,
+        dest="agrupar_artigo",
+        help="Agrupa trechos por artigo antes do rerank.",
+    )
     args = parser.parse_args()
 
     # Importações pesadas apenas na execução do script
@@ -212,6 +233,10 @@ def main() -> None:
 
     inst_map = _instituicao_por_pergunta(perguntas, fontes)
 
+    print(f"Inicializando LLM Gemini ({args.modelo})...")
+    llm = criar_llm_gemini(args.modelo)
+    print("  LLM pronto.")
+
     print("Conectando ao banco...")
     conn = conectar()
     print("  Conectado.")
@@ -226,10 +251,6 @@ def main() -> None:
     reranker = criar_reranker(modelo_rr)
     print("  Reranker pronto.")
 
-    print(f"Inicializando LLM Gemini ({args.modelo})...")
-    llm = criar_llm_gemini(args.modelo)
-    print("  LLM pronto.")
-
     def responder_fn(pergunta: dict) -> dict:
         inst = inst_map.get(pergunta["id"])
         try:
@@ -240,6 +261,8 @@ def main() -> None:
                 reranker,
                 llm,
                 instituicao=inst,
+                max_artigos=args.max_artigos,
+                agrupar_antes_do_rerank=args.agrupar_artigo,
             )
         except ErroLLM as exc:
             resp = {"erro": str(exc)}
@@ -261,7 +284,13 @@ def main() -> None:
     salvar_resultado(resultado, destino, args.rotulo)
     print(f"Resultado salvo em {destino}")
 
-    _imprimir_relatorio(resultado, args.rotulo, args.modelo)
+    _imprimir_relatorio(
+        resultado,
+        args.rotulo,
+        args.modelo,
+        max_artigos=args.max_artigos,
+        agrupar=args.agrupar_artigo,
+    )
 
     conn.close()
 
