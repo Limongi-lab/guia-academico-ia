@@ -13,7 +13,7 @@ from typing import Any
 import psycopg
 
 from guia.geracao import montar_contexto, responder
-from guia.recuperacao.busca import buscar_com_rerank
+from guia.recuperacao.busca import buscar_com_rerank, buscar_com_rerank_por_artigo
 
 
 def perguntar(
@@ -26,13 +26,15 @@ def perguntar(
     k_candidatos: int = 30,
     k_recuperacao: int = 10,
     max_artigos: int = 3,
+    agrupar_antes_do_rerank: bool = False,
     relogio: Callable[[], float] = time.perf_counter,
 ) -> dict[str, Any]:
     """Executa o pipeline completo para responder a uma pergunta.
 
     Passos:
       1. Gera o embedding da pergunta com o embedder.
-      2. Executa busca vetorial filtrada e reranking com o reranker.
+      2. Executa busca vetorial filtrada e reranking com o reranker
+         (agrupando por artigo antes do rerank se agrupar_antes_do_rerank for True).
       3. Monta blocos de contexto consolidados por artigo.
       4. Gera a resposta com o LLM e valida citações/recusa.
 
@@ -45,7 +47,8 @@ def perguntar(
     t_inicio = relogio()
 
     vetor = embedder([pergunta])[0]
-    recuperados = buscar_com_rerank(
+    funcao_busca = buscar_com_rerank_por_artigo if agrupar_antes_do_rerank else buscar_com_rerank
+    recuperados = funcao_busca(
         conn,
         vetor,
         pergunta,
