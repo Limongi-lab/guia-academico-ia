@@ -275,7 +275,10 @@ def montar_prompt(
         "Nunca invente números de blocos e nunca use outro formato de citação.\n"
         f"3. Se as fontes fornecidas não contiverem informação suficiente para responder com certeza, "
         f"responda EXATAMENTE com o token {TOKEN_RECUSA} e nada mais.\n"
-        "4. Seja claro, direto e objetivo."
+        f"4. Nunca escreva formulas, valores numericos, percentuais, prazos ou nomes que nao aparecam literalmente nas fontes. "
+        f"Se uma fonte apenas cita variaveis, ou diz que existe uma formula, tabela ou anexo sem trazer o conteudo, "
+        f"trate como informacao insuficiente e responda com o token {TOKEN_RECUSA}.\n"
+        "5. Seja claro, direto e objetivo."
     )
 
     linhas_user = ["Fontes disponíveis:\n"]
