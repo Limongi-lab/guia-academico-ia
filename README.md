@@ -36,8 +36,8 @@ Os PDFs **não são versionados** neste repositório. Os links das fontes públi
 ## Roadmap
 
 - [x] Estrutura do projeto e ambiente
-- [ ] Coleta e ingestão dos documentos (divisão por artigo)
-- [ ] RAG de ponta a ponta com citação de fonte
+- [x] Coleta e ingestão dos documentos (divisão por artigo)
+- [x] RAG de ponta a ponta com citação de fonte
 - [ ] Conjunto de avaliação e métricas
 - [ ] Melhorias medidas (chunking, reranking, prompt)
 - [ ] API, frontend e deploy público
