@@ -4,7 +4,7 @@ import os
 import psycopg
 from pgvector.psycopg import register_vector
 
-_DSN_PADRAO = "postgresql://guia:guia@localhost:5432/guia"
+_DSN_PADRAO = "postgresql://guia:guia@127.0.0.1:5432/guia"
 
 
 def conectar(dsn: str | None = None) -> psycopg.Connection:
