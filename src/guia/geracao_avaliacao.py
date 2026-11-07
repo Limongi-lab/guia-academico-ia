@@ -88,6 +88,10 @@ def avaliar_geracao(
                 "tokens_saida": None,
                 "latencia_s": None,
                 "erro": str(erro),
+                "resposta_bruta": None,
+                "contexto": [],
+                "citacoes": [],
+                "recuperados_ids": None,
             })
             continue
 
@@ -97,6 +101,10 @@ def avaliar_geracao(
         ti = resp.get("tokens_entrada")
         ts = resp.get("tokens_saida")
         lat = resp.get("latencia_s")
+        resposta_bruta = resp.get("resposta_bruta")
+        contexto = [b["citacao"] for b in resp.get("blocos") or []]
+        citacoes_lista = [c.get("citacao", "") for c in citacoes]
+        recuperados_ids = resp.get("recuperados_ids")
 
         if motivo != "sem_contexto":
             chamadas_llm += 1
@@ -145,6 +153,10 @@ def avaliar_geracao(
             "tokens_saida": ts,
             "latencia_s": lat,
             "erro": None,
+            "resposta_bruta": resposta_bruta,
+            "contexto": contexto,
+            "citacoes": citacoes_lista,
+            "recuperados_ids": recuperados_ids,
         })
 
     n_erros = len(erros)
