@@ -1,0 +1,1269 @@
+{
+  "rotulo": "dev-corpus2",
+  "n_perguntas": 40,
+  "n_avaliadas": 39,
+  "pendentes": [
+    "q005"
+  ],
+  "n_erros": 0,
+  "erros": [],
+  "n_recusa": 7,
+  "n_recusa_correta": 6,
+  "taxa_recusa_correta": 0.8571428571428571,
+  "n_validas": 32,
+  "n_respondidas": 29,
+  "n_recusa_indevida": 3,
+  "taxa_recusa_indevida": 0.09375,
+  "n_citacao_correta": 28,
+  "taxa_citacao_correta": 0.9655172413793104,
+  "aproveitamento": 0.875,
+  "motivos_recusa": {
+    "llm_recusou": 9
+  },
+  "chamadas_llm": 39,
+  "tokens_entrada_total": 29933,
+  "tokens_saida_total": 2357,
+  "tokens_entrada_medio": 767.5128205128206,
+  "tokens_saida_medio": 60.43589743589744,
+  "latencia_media_s": 1.069011928205071,
+  "latencia_mediana_s": 0.9770435999962501,
+  "latencia_max_s": 1.6548608000011882,
+  "custo_usd": null,
+  "custo_usd_por_chamada": null,
+  "por_pergunta": [
+    {
+      "id": "q001",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 860,
+      "tokens_saida": 23,
+      "latencia_s": 1.1790771000014502,
+      "erro": null,
+      "resposta_bruta": "A duração mínima do estágio obrigatório em Gestão da Informação é de 300 horas [1].",
+      "contexto": [
+        "Texto principal",
+        "Texto principal",
+        "Requisitos"
+      ],
+      "citacoes": [
+        "Texto principal"
+      ],
+      "recuperados_ids": [
+        "fagen-gi-estagio/secao-1#1",
+        "fagen-gi-estagio/secao-1#2",
+        "fagen-gi-estagio/secao-2#1",
+        "fagen-gi-estagio/secao-3#1",
+        "ufu-normas-estagio/art-34#1",
+        "ufu-normas-gerais-graduacao/art-190#1",
+        "ufu-normas-estagio/art-18#1",
+        "ufu-normas-gerais-graduacao/art-26#1",
+        "ufu-normas-estagio/art-31#1",
+        "ufu-normas-estagio/art-2#1"
+      ]
+    },
+    {
+      "id": "q002",
+      "tipo": "procedimento",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 955,
+      "tokens_saida": 311,
+      "latencia_s": 1.5185816000011982,
+      "erro": null,
+      "resposta_bruta": "Para solicitar o registro de matrícula interna na disciplina de Estágio Obrigatório (GGI042), você precisa enviar um e-mail para a Coordenação de Estágio e Trabalho de Curso (CETC) anexando:\n\n1. O \"Formulário Digital de Registro de Matrícula na Disciplina de Estágio Obrigatório - GGI042\" preenchido, incluindo o e-mail utilizado no cadastro do SEI UFU - Usuário Externo [2].\n2. O documento correspondente à sua opção, sendo:\n   - **Caso opte por Estágio Regular:** Cópia do Termo de Compromisso do Estágio (Estágio Obrigatório) [2].\n   - **Caso opte por Equivalência de Estágio:** Escolher uma das quatro opções e enviar o respectivo documento:\n     - Vínculo Empregatício superior a 12 meses: Cópia da Carteira profissional, folhas de identificação e do contrato de trabalho [2].\n     - Iniciação Científica (PIBIC, PIVIC, PIBID): Cópia do termo de concessão e encerramento de projeto [2].\n     - Servidor Público: Cópia do termo de posse em cargo ou emprego público e declaração da chefia imediata [2].\n     - Empreendedor (Proprietário ou Sócio): Cópia do Contrato social ou documento equivalente [2].",
+      "contexto": [
+        "Texto principal",
+        "Passo 4 (ALUNO), p. 1-2",
+        "Passo 5 (COORDENAÇÃO DE ESTÁGIO), p. 2"
+      ],
+      "citacoes": [
+        "Passo 4 (ALUNO), p. 1-2"
+      ],
+      "recuperados_ids": [
+        "fagen-gi-estagio/secao-1#2",
+        "fagen-gi-estagio-passo-a-passo/passo-4#1",
+        "fagen-gi-estagio-passo-a-passo/passo-5#1",
+        "fagen-gi-estagio/secao-1#1",
+        "fagen-gi-estagio-passo-a-passo/passo-7#1",
+        "fagen-gi-estagio-passo-a-passo/passo-10#1",
+        "fagen-gi-tcc-passo-a-passo/passo-5#1",
+        "fagen-gi-estagio-passo-a-passo/passo-6#1",
+        "fagen-gi-estagio-passo-a-passo/passo-3#1",
+        "prograd-estagio-licenciatura/secao-2#5"
+      ]
+    },
+    {
+      "id": "q003",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 657,
+      "tokens_saida": 46,
+      "latencia_s": 0.9355332999984967,
+      "erro": null,
+      "resposta_bruta": "O telefone do Setor de Estágio é 34 3291-8984 / 34 3291-8983 [1, 2, 3].",
+      "contexto": [
+        "Contato",
+        "Contato",
+        "Contato"
+      ],
+      "citacoes": [
+        "Contato",
+        "Contato",
+        "Contato"
+      ],
+      "recuperados_ids": [
+        "prograd-estagio-pagina/contato#1",
+        "prograd-estagio-licenciatura/contato#1",
+        "prograd-estagio-externo-pagina/contato#1",
+        "prograd-estagio-interno-nao-obrigatorio/contato#1",
+        "prograd-estagio-interno-obrigatorio/contato#1",
+        "prograd-estagio-licenciatura/secao-2#9",
+        "prograd-estagio-externo-pagina/secao-2#8",
+        "ufu-normas-estagio/art-27#1",
+        "prograd-estagio-externo-pagina/secao-2#5",
+        "prograd-estagio-licenciatura/secao-2#5"
+      ]
+    },
+    {
+      "id": "q004",
+      "tipo": "recusa",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 666,
+      "tokens_saida": 7,
+      "latencia_s": 0.9412731000047643,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 79, p. 24",
+        "Art. 33, p. 12",
+        "Art. 29, p. 11"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "uniube-regimento-geral-2015/art-79#1",
+        "uniube-regimento-geral-2015/art-33#1",
+        "uniube-regimento-geral-2015/art-29#1",
+        "uniube-regimento-geral-2015/art-20#1",
+        "uniube-regimento-geral-2015/art-46#3",
+        "uniube-regimento-geral-2015/art-14#1",
+        "uniube-regimento-geral-2015/art-37#1",
+        "ufu-normas-gerais-graduacao/art-85#1",
+        "uniube-regimento-geral-2015/art-21#1",
+        "uniube-regimento-geral-2015/art-34#5"
+      ]
+    },
+    {
+      "id": "q020",
+      "tipo": "vigencia",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 1184,
+      "tokens_saida": 7,
+      "latencia_s": 0.7748464000032982,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 41, p. 14",
+        "Art. 78, p. 22-23",
+        "Art. 55, p. 18"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-41#1",
+        "ufu-normas-gerais-graduacao/art-78#1",
+        "ufu-normas-gerais-graduacao/art-55#1",
+        "ufu-normas-gerais-graduacao/art-78#4",
+        "ufu-normas-gerais-graduacao/art-78#2",
+        "ufu-normas-gerais-graduacao/art-78#3",
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-gerais-graduacao/art-148#1",
+        "ufu-normas-gerais-graduacao/art-79#1",
+        "ufu-normas-gerais-graduacao/art-52#1"
+      ]
+    },
+    {
+      "id": "q021",
+      "tipo": "vigencia",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 1004,
+      "tokens_saida": 7,
+      "latencia_s": 0.768942299997434,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 53, p. 17-18",
+        "Art. 41, p. 14",
+        "Art. 55, p. 18"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-gerais-graduacao/art-41#1",
+        "ufu-normas-gerais-graduacao/art-55#1",
+        "ufu-normas-gerais-graduacao/art-197#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "ufu-normas-gerais-graduacao/art-67#1",
+        "ufu-normas-gerais-graduacao/art-71#1",
+        "ufu-normas-gerais-graduacao/art-52#1",
+        "ufu-normas-gerais-graduacao/art-81#1",
+        "ufu-normas-gerais-graduacao/art-127#1"
+      ]
+    },
+    {
+      "id": "q022",
+      "tipo": "vigencia",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 840,
+      "tokens_saida": 19,
+      "latencia_s": 0.913517499997397,
+      "erro": null,
+      "resposta_bruta": "A análise da documentação exigida na transferência facultativa é coordenada pela DIRPS [1].",
+      "contexto": [
+        "Art. 41, p. 14",
+        "Art. 55, p. 18",
+        "Art. 81, p. 23"
+      ],
+      "citacoes": [
+        "Art. 41, p. 14"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-41#1",
+        "ufu-normas-gerais-graduacao/art-55#1",
+        "ufu-normas-gerais-graduacao/art-81#1",
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "prograd-estagio-licenciatura/secao-1#2",
+        "prograd-estagio-externo-pagina/secao-2#5",
+        "ufu-normas-gerais-graduacao/art-64#4",
+        "ufu-normas-gerais-graduacao/art-52#1",
+        "ufu-normas-gerais-graduacao/art-51#1",
+        "ufu-normas-gerais-graduacao/art-54#1"
+      ]
+    },
+    {
+      "id": "q030",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 411,
+      "tokens_saida": 39,
+      "latencia_s": 0.8770484999986365,
+      "erro": null,
+      "resposta_bruta": "O trancamento geral de matrícula poderá ser requerido pelo estudante antes de transcorridos 3/4 do período letivo, no prazo estabelecido no Calendário Acadêmico [2].",
+      "contexto": [
+        "Art. 104, p. 29",
+        "Art. 101, p. 29",
+        "Art. 102, p. 29"
+      ],
+      "citacoes": [
+        "Art. 101, p. 29"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-104#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-30#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-108#1",
+        "ufu-normas-gerais-graduacao/art-100#1",
+        "ufu-normas-gerais-graduacao/art-99#1",
+        "ufu-normas-gerais-graduacao/art-106#1"
+      ]
+    },
+    {
+      "id": "q031",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 741,
+      "tokens_saida": 59,
+      "latencia_s": 1.3972482000026503,
+      "erro": null,
+      "resposta_bruta": "O trancamento geral de matrícula na UFU pode ser efetuado por, no máximo, 2 (dois) semestres letivos, consecutivos ou não, para os cursos semestrais, ou por 1 (um) ano, para os cursos anuais [3].",
+      "contexto": [
+        "Art. 104, p. 29",
+        "Art. 78, p. 22-23",
+        "Art. 102, p. 29"
+      ],
+      "citacoes": [
+        "Art. 102, p. 29"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-104#1",
+        "ufu-normas-gerais-graduacao/art-78#1",
+        "ufu-normas-gerais-graduacao/art-78#3",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-78#2",
+        "ufu-normas-gerais-graduacao/art-78#4",
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "ufu-normas-gerais-graduacao/art-77#1"
+      ]
+    },
+    {
+      "id": "q032",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 617,
+      "tokens_saida": 45,
+      "latencia_s": 0.9335657999981777,
+      "erro": null,
+      "resposta_bruta": "Sim, o trancamento geral de matrícula é vedado nos dois primeiros semestres letivos para os cursos semestrais da UFU, exceto por motivo de caso fortuito ou de força maior [2].",
+      "contexto": [
+        "Art. 110, p. 30",
+        "Art. 104, p. 29",
+        "Art. 102, p. 29"
+      ],
+      "citacoes": [
+        "Art. 104, p. 29"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-104#1",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-107#1",
+        "ufu-normas-gerais-graduacao/art-92#1",
+        "ufu-normas-gerais-graduacao/art-100#1",
+        "ufu-normas-gerais-graduacao/art-106#1",
+        "ufu-normas-gerais-graduacao/art-108#1",
+        "ufu-normas-gerais-graduacao/art-99#1"
+      ]
+    },
+    {
+      "id": "q033",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 774,
+      "tokens_saida": 105,
+      "latencia_s": 1.1456918000039877,
+      "erro": null,
+      "resposta_bruta": "O trancamento parcial de matrícula (em um componente curricular) pode ser concedido uma única vez em cada componente curricular [1]. A solicitação deve ser feita antes de decorrido 1/3 do semestre ou ano letivo, conforme o prazo previsto no Calendário Acadêmico [1]. \n\nEm casos de força maior ou caso fortuito devidamente comprovados, o Colegiado de Curso poderá conceder o trancamento parcial por mais uma única vez em um mesmo componente curricular [1].",
+      "contexto": [
+        "Art. 110, p. 30",
+        "Art. 102, p. 29",
+        "Art. 108, p. 30"
+      ],
+      "citacoes": [
+        "Art. 110, p. 30"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-108#1",
+        "ufu-normas-gerais-graduacao/art-104#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-100#1",
+        "ufu-normas-gerais-graduacao/art-111#1",
+        "ufu-normas-gerais-graduacao/art-106#1",
+        "ufu-normas-gerais-graduacao/art-107#1",
+        "ufu-normas-gerais-graduacao/art-119#1"
+      ]
+    },
+    {
+      "id": "q034",
+      "tipo": "resposta_direta",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 672,
+      "tokens_saida": 7,
+      "latencia_s": 0.8574234000043361,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 110, p. 30",
+        "Art. 100, p. 29",
+        "Art. 99, p. 29"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-100#1",
+        "ufu-normas-gerais-graduacao/art-99#1",
+        "ufu-normas-gerais-graduacao/art-119#1",
+        "ufu-normas-gerais-graduacao/art-92#1",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "ufu-normas-gerais-graduacao/art-107#1",
+        "ufu-normas-gerais-graduacao/art-103#1"
+      ]
+    },
+    {
+      "id": "q035",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 988,
+      "tokens_saida": 50,
+      "latencia_s": 1.558056800000486,
+      "erro": null,
+      "resposta_bruta": "Para ser aprovado, o estudante deverá obter, no mínimo, 60 (sessenta) pontos de aproveitamento acadêmico e 75% (setenta e cinco por cento) de frequência nas atividades acadêmicas [2].",
+      "contexto": [
+        "Art. 78, p. 22-23",
+        "Art. 127, p. 33",
+        "Texto principal"
+      ],
+      "citacoes": [
+        "Art. 127, p. 33"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-78#2",
+        "ufu-normas-gerais-graduacao/art-78#3",
+        "ufu-normas-gerais-graduacao/art-78#1",
+        "ufu-normas-gerais-graduacao/art-78#4",
+        "ufu-normas-gerais-graduacao/art-127#1",
+        "prograd-estagio-interno-obrigatorio/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-48#1",
+        "ufu-normas-gerais-graduacao/art-191#1",
+        "ufu-normas-gerais-graduacao/art-129#1",
+        "ufu-normas-estagio/art-28#1"
+      ]
+    },
+    {
+      "id": "q036",
+      "tipo": "procedimento",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 765,
+      "tokens_saida": 139,
+      "latencia_s": 1.1502264000009745,
+      "erro": null,
+      "resposta_bruta": "Havendo discordância quanto ao resultado final da avaliação da aprendizagem (frequência ou nota), o estudante poderá interpor recurso ao Colegiado de Curso, por meio de requerimento consubstanciado, no prazo de 5 (cinco) dias úteis, contados a partir do início do semestre letivo subsequente ao que tiver cursado o componente [1]. \n\nAlém disso, após a resposta do professor, o estudante também pode recorrer do resultado ao Colegiado de Curso no prazo de 5 (cinco) dias úteis, encaminhando um requerimento com justificativas fundamentadas à Coordenação de Curso em que estiver matriculado [2].",
+      "contexto": [
+        "Art. 128, p. 33",
+        "Art. 134, p. 34-35",
+        "Art. 146, p. 37"
+      ],
+      "citacoes": [
+        "Art. 128, p. 33",
+        "Art. 134, p. 34-35"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-128#1",
+        "ufu-normas-gerais-graduacao/art-134#1",
+        "ufu-normas-gerais-graduacao/art-146#1",
+        "ufu-normas-gerais-graduacao/art-133#1",
+        "ufu-normas-gerais-graduacao/art-140#1",
+        "ufu-normas-gerais-graduacao/art-169#1",
+        "ufu-normas-gerais-graduacao/art-144#1",
+        "ufu-normas-gerais-graduacao/art-132#1",
+        "ufu-normas-gerais-graduacao/art-171#1",
+        "ufu-normas-gerais-graduacao/art-70#1"
+      ]
+    },
+    {
+      "id": "q037",
+      "tipo": "procedimento",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 607,
+      "tokens_saida": 31,
+      "latencia_s": 0.9986763999986579,
+      "erro": null,
+      "resposta_bruta": "O prazo para a solicitação da atividade acadêmica avaliativa fora de época ao professor será de 3 (três) dias úteis [1].",
+      "contexto": [
+        "Art. 139, p. 35",
+        "Art. 138, p. 35",
+        "Art. 176, p. 42-43"
+      ],
+      "citacoes": [
+        "Art. 139, p. 35"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-139#1",
+        "ufu-normas-gerais-graduacao/art-138#1",
+        "ufu-normas-gerais-graduacao/art-176#1",
+        "ufu-normas-gerais-graduacao/art-162#1",
+        "ufu-normas-gerais-graduacao/art-215#1",
+        "ufu-normas-gerais-graduacao/art-146#1",
+        "ufu-normas-gerais-graduacao/art-137#1",
+        "ufu-normas-gerais-graduacao/art-174#1",
+        "ufu-normas-gerais-graduacao/art-70#1",
+        "ufu-normas-gerais-graduacao/art-183#1"
+      ]
+    },
+    {
+      "id": "q038",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 459,
+      "tokens_saida": 116,
+      "latencia_s": 1.0212855999998283,
+      "erro": null,
+      "resposta_bruta": "O professor é obrigado a aplicar atividade acadêmica avaliativa fora de época, desde que devidamente comprovado, nos seguintes casos de ausência do estudante:\n\nI – exercícios ou manobras efetuadas na mesma data e hora, em caso de Serviço Militar Temporário, conforme a Lei nº 4.375, de 17 de agosto de 1964;\nII – problema de saúde devidamente comprovado por atestado; e\nIII – falecimento de filhos, pais, cônjuges e dependentes econômicos [1].",
+      "contexto": [
+        "Art. 138, p. 35",
+        "Art. 137, p. 35",
+        "Art. 139, p. 35"
+      ],
+      "citacoes": [
+        "Art. 138, p. 35"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-138#1",
+        "ufu-normas-gerais-graduacao/art-137#1",
+        "ufu-normas-gerais-graduacao/art-139#1",
+        "ufu-normas-gerais-graduacao/art-2#3",
+        "ufu-normas-gerais-graduacao/art-131#1",
+        "ufu-normas-gerais-graduacao/art-132#1",
+        "ufu-normas-gerais-graduacao/art-136#1",
+        "ufu-normas-gerais-graduacao/art-29#1",
+        "ufu-normas-gerais-graduacao/art-215#1",
+        "ufu-normas-gerais-graduacao/art-96#1"
+      ]
+    },
+    {
+      "id": "q039",
+      "tipo": "procedimento",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 786,
+      "tokens_saida": 153,
+      "latencia_s": 1.124170499999309,
+      "erro": null,
+      "resposta_bruta": "Sim, é possível efetuar a solicitação de matrícula extemporânea por meio eletrônico até o quinto dia letivo do período letivo vigente, caso você não tenha efetuado a renovação no prazo previsto no Calendário Acadêmico [1]. \n\nPara isso, é necessário observar as seguintes condições:\n* A solicitação deve ser devidamente justificada e dirigida ao Coordenador do Curso [1].\n* O deferimento fica condicionado à disponibilidade de vagas, sem a aplicação da prioridade de matrícula definida nos artigos 86 e 87 [1].\n* O estudante tem direito à renovação extemporânea de matrícula apenas uma única vez, salvo em casos fortuitos ou por motivos de força maior [1].",
+      "contexto": [
+        "Art. 91, p. 26-27",
+        "Art. 88, p. 26",
+        "Art. 85, p. 24-25"
+      ],
+      "citacoes": [
+        "Art. 91, p. 26-27"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-91#1",
+        "ufu-normas-gerais-graduacao/art-88#1",
+        "ufu-normas-gerais-graduacao/art-85#1",
+        "ufu-normas-gerais-graduacao/art-98#1",
+        "ufu-normas-gerais-graduacao/art-107#1",
+        "ufu-normas-gerais-graduacao/art-86#1",
+        "ufu-normas-gerais-graduacao/art-97#1",
+        "ufu-normas-gerais-graduacao/art-87#3",
+        "ufu-normas-gerais-graduacao/art-30#1",
+        "ufu-normas-gerais-graduacao/art-87#1"
+      ]
+    },
+    {
+      "id": "q040",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 782,
+      "tokens_saida": 40,
+      "latencia_s": 0.8356400999982725,
+      "erro": null,
+      "resposta_bruta": "É permitido ao estudante matricular-se em até 2 (dois) componentes curriculares ofertados por outros cursos em cada período letivo, desde que atendidos os requisitos estabelecidos [1].",
+      "contexto": [
+        "Art. 92, p. 27",
+        "Art. 113, p. 31",
+        "Art. 65, p. 20"
+      ],
+      "citacoes": [
+        "Art. 92, p. 27"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-92#1",
+        "ufu-normas-gerais-graduacao/art-113#1",
+        "ufu-normas-gerais-graduacao/art-65#1",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-126#1",
+        "ufu-normas-gerais-graduacao/art-108#1",
+        "ufu-normas-gerais-graduacao/art-11#1",
+        "ufu-normas-gerais-graduacao/art-27#1",
+        "ufu-normas-gerais-graduacao/art-28#1",
+        "ufu-normas-gerais-graduacao/art-191#1"
+      ]
+    },
+    {
+      "id": "q041",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 743,
+      "tokens_saida": 50,
+      "latencia_s": 0.8714676000017789,
+      "erro": null,
+      "resposta_bruta": "O estudante deve ter um CRA geral igual ou superior a 85 (oitenta e cinco) pontos, exceto nos casos em que o Colegiado aprove norma específica que estabeleça outra condição em substituição a essa exigência [1].",
+      "contexto": [
+        "Art. 157, p. 39",
+        "Art. 156, p. 38-39",
+        "Art. 158, p. 39"
+      ],
+      "citacoes": [
+        "Art. 157, p. 39"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-157#1",
+        "ufu-normas-gerais-graduacao/art-156#1",
+        "ufu-normas-gerais-graduacao/art-158#1",
+        "ufu-normas-gerais-graduacao/art-160#1",
+        "ufu-normas-gerais-graduacao/art-162#1",
+        "ufu-normas-gerais-graduacao/art-124#1",
+        "ufu-normas-gerais-graduacao/art-161#1",
+        "ufu-normas-gerais-graduacao/art-167#1",
+        "ufu-normas-gerais-graduacao/art-159#1",
+        "ufu-normas-gerais-graduacao/art-121#1"
+      ]
+    },
+    {
+      "id": "q042",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 753,
+      "tokens_saida": 104,
+      "latencia_s": 0.9932572999969125,
+      "erro": null,
+      "resposta_bruta": "Com base no documento fornecido, não poderá ser aplicado exame de suficiência para os seguintes componentes curriculares:\n\nI – atividades acadêmicas complementares;\nII – atividades curriculares de extensão;\nIII – estágios obrigatórios;\nIV – práticas especificas; e\nV – Trabalho de Conclusão de Curso [1].\n\nAlém disso, o Colegiado poderá aprovar norma específica que estabeleça outros componentes curriculares para os quais o exame de suficiência não será aplicado [1].",
+      "contexto": [
+        "Art. 157, p. 39",
+        "Art. 161, p. 40",
+        "Art. 124, p. 33"
+      ],
+      "citacoes": [
+        "Art. 157, p. 39"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-157#1",
+        "ufu-normas-gerais-graduacao/art-161#1",
+        "ufu-normas-gerais-graduacao/art-124#1",
+        "ufu-normas-gerais-graduacao/art-155#1",
+        "ufu-normas-gerais-graduacao/art-159#1",
+        "ufu-normas-gerais-graduacao/art-2#7",
+        "ufu-normas-gerais-graduacao/art-158#1",
+        "ufu-normas-gerais-graduacao/art-160#1",
+        "ufu-normas-gerais-graduacao/art-94#1",
+        "ufu-normas-gerais-graduacao/art-167#1"
+      ]
+    },
+    {
+      "id": "q043",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 670,
+      "tokens_saida": 35,
+      "latencia_s": 0.9770435999962501,
+      "erro": null,
+      "resposta_bruta": "O estudante poderá ser passível de jubilamento se for reprovado em um mesmo componente curricular por 4 (quatro) vezes, consecutivas ou não [1].",
+      "contexto": [
+        "Art. 167, p. 41",
+        "Art. 169, p. 41",
+        "Art. 163, p. 40"
+      ],
+      "citacoes": [
+        "Art. 167, p. 41"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-167#1",
+        "ufu-normas-gerais-graduacao/art-169#1",
+        "ufu-normas-gerais-graduacao/art-163#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "ufu-normas-gerais-graduacao/art-173#1",
+        "ufu-normas-gerais-graduacao/art-172#1",
+        "ufu-normas-gerais-graduacao/art-126#1",
+        "ufu-normas-gerais-graduacao/art-120#1",
+        "ufu-normas-gerais-graduacao/art-127#1",
+        "ufu-normas-gerais-graduacao/art-166#1"
+      ]
+    },
+    {
+      "id": "q044",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 750,
+      "tokens_saida": 96,
+      "latencia_s": 1.6548608000011882,
+      "erro": null,
+      "resposta_bruta": "A Coordenação de Curso deverá conceder dilação de prazo ao estudante para integralização curricular nos seguintes casos:\n\nI – quando, pelo menos, 80% (oitenta por cento) da carga horária total da integralização curricular fixada no Projeto Pedagógico do Curso estiver concluída; ou [1]\nII – quando faltar apenas cumprir o Estágio Obrigatório, Trabalho de Conclusão de Curso, Monografia [1].",
+      "contexto": [
+        "Art. 175, p. 42",
+        "Art. 178, p. 43",
+        "Art. 176, p. 42-43"
+      ],
+      "citacoes": [
+        "Art. 175, p. 42"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-175#1",
+        "ufu-normas-gerais-graduacao/art-178#1",
+        "ufu-normas-gerais-graduacao/art-176#1",
+        "ufu-normas-gerais-graduacao/art-181#1",
+        "ufu-normas-gerais-graduacao/art-179#1",
+        "ufu-normas-gerais-graduacao/art-100#1",
+        "ufu-normas-gerais-graduacao/art-174#1",
+        "ufu-normas-gerais-graduacao/art-183#1",
+        "ufu-normas-gerais-graduacao/art-177#1",
+        "ufu-normas-gerais-graduacao/art-153#1"
+      ]
+    },
+    {
+      "id": "q045",
+      "tipo": "vigencia",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 740,
+      "tokens_saida": 90,
+      "latencia_s": 1.5529290999984369,
+      "erro": null,
+      "resposta_bruta": "Não. A concessão de dilação pode ser feita até o limite de 50% do prazo máximo previsto no Projeto Pedagógico do Curso pela Coordenação de Curso e pelo Colegiado de Curso [1], mas quando o pedido de dilação exceder esse percentual de 50%, o Colegiado de Curso deverá enviar o processo, acompanhado de Parecer, para o Conselho da Unidade [1].",
+      "contexto": [
+        "Art. 178, p. 43",
+        "Art. 175, p. 42",
+        "Art. 174, p. 42"
+      ],
+      "citacoes": [
+        "Art. 178, p. 43"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-178#1",
+        "ufu-normas-gerais-graduacao/art-175#1",
+        "ufu-normas-gerais-graduacao/art-174#1",
+        "ufu-normas-gerais-graduacao/art-177#1",
+        "ufu-normas-gerais-graduacao/art-176#1",
+        "ufu-normas-gerais-graduacao/art-20#1",
+        "ufu-normas-gerais-graduacao/art-167#1",
+        "ufu-normas-gerais-graduacao/art-2#5",
+        "ufu-normas-gerais-graduacao/art-26#1",
+        "ufu-normas-gerais-graduacao/art-88#1"
+      ]
+    },
+    {
+      "id": "q046",
+      "tipo": "vigencia",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": false,
+      "tokens_entrada": 874,
+      "tokens_saida": 92,
+      "latencia_s": 1.3023919000042952,
+      "erro": null,
+      "resposta_bruta": "Não [1]. O ingresso de candidatos para o preenchimento das vagas remanescentes é realizado semestralmente, havendo vagas ociosas [1]. Além disso, para os cursos com entradas semestrais, o preenchimento dessas vagas poderá ocorrer 100% no primeiro semestre ou dividido em 50% no primeiro semestre e 50% no segundo semestre, mediante manifestação da Coordenação do Curso [1].",
+      "contexto": [
+        "Art. 53, p. 17-18",
+        "Art. 71, p. 21-22",
+        "Art. 104, p. 29"
+      ],
+      "citacoes": [
+        "Art. 53, p. 17-18"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-gerais-graduacao/art-71#1",
+        "ufu-normas-gerais-graduacao/art-104#1",
+        "ufu-normas-gerais-graduacao/art-58#1",
+        "ufu-normas-gerais-graduacao/art-52#1",
+        "ufu-normas-gerais-graduacao/art-38#1",
+        "prograd-estagio-pagina/secao-1#1",
+        "prograd-estagio-interno-obrigatorio/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-78#4",
+        "ufu-normas-gerais-graduacao/art-78#3"
+      ]
+    },
+    {
+      "id": "q047",
+      "tipo": "vigencia",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 680,
+      "tokens_saida": 47,
+      "latencia_s": 0.8463322999959928,
+      "erro": null,
+      "resposta_bruta": "Sim, os candidatos diplomados no exterior que concorrem pelo processo de Portador de Diploma devem apresentar o histórico escolar, devidamente revalidado, conforme a regulamentação específica do Ministério da Educação (MEC) [1].",
+      "contexto": [
+        "Art. 42, p. 14-15",
+        "Art. 56, p. 18",
+        "Art. 187, p. 46"
+      ],
+      "citacoes": [
+        "Art. 42, p. 14-15"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-42#1",
+        "ufu-normas-gerais-graduacao/art-56#1",
+        "ufu-normas-gerais-graduacao/art-187#1",
+        "ufu-normas-gerais-graduacao/art-50#1",
+        "ufu-normas-gerais-graduacao/art-84#1",
+        "ufu-normas-gerais-graduacao/art-199#1",
+        "ufu-normas-gerais-graduacao/art-116#1",
+        "ufu-normas-gerais-graduacao/art-112#1",
+        "ufu-normas-gerais-graduacao/art-81#1",
+        "ufu-normas-gerais-graduacao/art-195#1"
+      ]
+    },
+    {
+      "id": "q048",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 599,
+      "tokens_saida": 30,
+      "latencia_s": 0.8342359000016586,
+      "erro": null,
+      "resposta_bruta": "O prazo para ajuste de matrícula se estenderá até, ao menos, o 12º dia letivo do período letivo [1].",
+      "contexto": [
+        "Art. 98, p. 28-29",
+        "Art. 91, p. 26-27",
+        "Art. 88, p. 26"
+      ],
+      "citacoes": [
+        "Art. 98, p. 28-29"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-98#1",
+        "ufu-normas-gerais-graduacao/art-91#1",
+        "ufu-normas-gerais-graduacao/art-88#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-29#6",
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-87#2",
+        "ufu-normas-gerais-graduacao/art-30#1",
+        "ufu-normas-gerais-graduacao/art-2#5",
+        "ufu-normas-gerais-graduacao/art-102#1"
+      ]
+    },
+    {
+      "id": "q049",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 949,
+      "tokens_saida": 22,
+      "latencia_s": 0.8685966999983066,
+      "erro": null,
+      "resposta_bruta": "A mudança de turno será concedida ao discente por até 2 (duas) vezes [1].",
+      "contexto": [
+        "Art. 71, p. 21-22",
+        "Art. 65, p. 20",
+        "Art. 55, p. 18"
+      ],
+      "citacoes": [
+        "Art. 71, p. 21-22"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-71#1",
+        "ufu-normas-gerais-graduacao/art-65#1",
+        "ufu-normas-gerais-graduacao/art-55#1",
+        "prograd-estagio-interno-obrigatorio/secao-2#2",
+        "ufu-normas-gerais-graduacao/art-113#1",
+        "prograd-estagio-pagina/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-104#1",
+        "prograd-estagio-interno-nao-obrigatorio/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-estagio/art-45#1"
+      ]
+    },
+    {
+      "id": "q050",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 631,
+      "tokens_saida": 24,
+      "latencia_s": 0.8920781999986502,
+      "erro": null,
+      "resposta_bruta": "O estudante especial poderá efetuar matrícula em até 4 (quatro) componentes curriculares do mesmo curso [1].",
+      "contexto": [
+        "Art. 113, p. 31",
+        "Art. 112, p. 31",
+        "Art. 117, p. 31"
+      ],
+      "citacoes": [
+        "Art. 113, p. 31"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-113#1",
+        "ufu-normas-gerais-graduacao/art-112#1",
+        "ufu-normas-gerais-graduacao/art-117#1",
+        "ufu-normas-gerais-graduacao/art-2#7",
+        "ufu-normas-gerais-graduacao/art-120#1",
+        "ufu-normas-gerais-graduacao/art-92#1",
+        "ufu-normas-gerais-graduacao/art-2#12",
+        "ufu-normas-gerais-graduacao/art-65#1",
+        "ufu-normas-gerais-graduacao/art-114#1",
+        "ufu-normas-gerais-graduacao/art-116#1"
+      ]
+    },
+    {
+      "id": "q051",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 1153,
+      "tokens_saida": 96,
+      "latencia_s": 1.6512017999993986,
+      "erro": null,
+      "resposta_bruta": "A carga horária semanal total deverá ser fixada em, no máximo, 34 (trinta e quatro) horas, não computadas as horas referentes aos componentes curriculares de Estágio Obrigatório e Trabalho de Conclusão de Curso [1]. Para o estudante formando ou participante de Mobilidade Acadêmica, o Colegiado de Curso poderá ampliar essa carga horária semanal para até, no máximo, 40 (quarenta) horas [1].",
+      "contexto": [
+        "Art. 26, p. 10",
+        "Art. 85, p. 24-25",
+        "Art. 78, p. 22-23"
+      ],
+      "citacoes": [
+        "Art. 26, p. 10"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-26#1",
+        "ufu-normas-gerais-graduacao/art-85#1",
+        "ufu-normas-gerais-graduacao/art-78#1",
+        "ufu-normas-gerais-graduacao/art-78#2",
+        "ufu-normas-gerais-graduacao/art-78#3",
+        "ufu-normas-gerais-graduacao/art-78#4",
+        "prograd-estagio-interno-nao-obrigatorio/secao-1#1",
+        "prograd-estagio-licenciatura/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-3#1",
+        "ufu-normas-gerais-graduacao/art-191#1"
+      ]
+    },
+    {
+      "id": "q052",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 1099,
+      "tokens_saida": 100,
+      "latencia_s": 1.5054974000013317,
+      "erro": null,
+      "resposta_bruta": "A gestante pode solicitar o Regime Especial de Aprendizagem a partir do 8º (oitavo) mês de gestação ou em situações decorrentes do estado de gravidez [1, 2]. A solicitação deve ser realizada a partir do 8º (oitavo) mês ou em até 5 (cinco) dias úteis contados a partir da ocorrência de complicação decorrente do estado de gravidez, devidamente comprovada por atestado médico [2].",
+      "contexto": [
+        "Art. 182, p. 44-45",
+        "Art. 183, p. 45",
+        "Art. 184, p. 45"
+      ],
+      "citacoes": [
+        "Art. 182, p. 44-45",
+        "Art. 183, p. 45"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-182#1",
+        "ufu-normas-gerais-graduacao/art-183#1",
+        "ufu-normas-gerais-graduacao/art-184#1",
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-185#1",
+        "ufu-normas-gerais-graduacao/art-186#1",
+        "ufu-normas-gerais-graduacao/art-2#12",
+        "ufu-normas-gerais-graduacao/art-67#1",
+        "ufu-normas-gerais-graduacao/art-29#5",
+        "ufu-normas-gerais-graduacao/art-106#1"
+      ]
+    },
+    {
+      "id": "q053",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 537,
+      "tokens_saida": 62,
+      "latencia_s": 0.8820992000037222,
+      "erro": null,
+      "resposta_bruta": "O professor deve divulgar as notas obtidas pelos estudantes nas avaliações parciais no prazo de 15 (quinze) dias úteis, a contar da data de sua realização, exceto em situações excepcionais previstas no Plano de Ensino, caso fortuito ou força maior [1].",
+      "contexto": [
+        "Art. 131, p. 34",
+        "Art. 132, p. 34",
+        "Art. 133, p. 34"
+      ],
+      "citacoes": [
+        "Art. 131, p. 34"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-131#1",
+        "ufu-normas-gerais-graduacao/art-132#1",
+        "ufu-normas-gerais-graduacao/art-133#1",
+        "ufu-normas-gerais-graduacao/art-134#1",
+        "ufu-normas-gerais-graduacao/art-139#1",
+        "ufu-normas-gerais-graduacao/art-140#1",
+        "ufu-normas-gerais-graduacao/art-136#1",
+        "ufu-normas-gerais-graduacao/art-128#1",
+        "ufu-normas-gerais-graduacao/art-203#1",
+        "ufu-normas-gerais-graduacao/art-145#1"
+      ]
+    },
+    {
+      "id": "q054",
+      "tipo": "resposta_direta",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 562,
+      "tokens_saida": 51,
+      "latencia_s": 1.0014034999985597,
+      "erro": null,
+      "resposta_bruta": "A vista deverá ocorrer em até 5 (cinco) dias úteis após a divulgação dos resultados [1]. Para a última atividade avaliativa do semestre ou ano letivo, a vista deverá ocorrer até o último dia do período letivo [1].",
+      "contexto": [
+        "Art. 132, p. 34",
+        "Art. 133, p. 34",
+        "Art. 136, p. 35"
+      ],
+      "citacoes": [
+        "Art. 132, p. 34"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-132#1",
+        "ufu-normas-gerais-graduacao/art-133#1",
+        "ufu-normas-gerais-graduacao/art-136#1",
+        "ufu-normas-gerais-graduacao/art-134#1",
+        "ufu-normas-gerais-graduacao/art-146#1",
+        "ufu-normas-gerais-graduacao/art-128#1",
+        "ufu-normas-gerais-graduacao/art-131#1",
+        "ufu-normas-gerais-graduacao/art-144#1",
+        "ufu-normas-gerais-graduacao/art-140#1",
+        "ufu-normas-gerais-graduacao/art-169#1"
+      ]
+    },
+    {
+      "id": "q055",
+      "tipo": "inconsistencia_fonte",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": true,
+      "tokens_entrada": 841,
+      "tokens_saida": 80,
+      "latencia_s": 0.8842606999969576,
+      "erro": null,
+      "resposta_bruta": "Segundo o Art. 165, a desistência da vaga ocorre quando o estudante não frequentar, no mínimo, 75% (setenta por cento) da carga horária total dos componentes curriculares ou de outras atividades acadêmicas promovidas pelo curso, ministradas durante os 10 (dez) primeiros dias letivos do período letivo de seu ingresso [1].",
+      "contexto": [
+        "Art. 165, p. 40-41",
+        "Art. 78, p. 22-23",
+        "Art. 77, p. 22"
+      ],
+      "citacoes": [
+        "Art. 165, p. 40-41"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-165#1",
+        "ufu-normas-gerais-graduacao/art-78#2",
+        "ufu-normas-gerais-graduacao/art-78#3",
+        "ufu-normas-gerais-graduacao/art-78#1",
+        "ufu-normas-gerais-graduacao/art-78#4",
+        "ufu-normas-gerais-graduacao/art-77#1",
+        "ufu-normas-estagio/art-42#1",
+        "ufu-normas-gerais-graduacao/art-163#1",
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-gerais-graduacao/art-71#1"
+      ]
+    },
+    {
+      "id": "q056",
+      "tipo": "recusa",
+      "recusou": false,
+      "motivo_recusa": null,
+      "citacao_ok": null,
+      "tokens_entrada": 708,
+      "tokens_saida": 139,
+      "latencia_s": 1.1589733000000706,
+      "erro": null,
+      "resposta_bruta": "De acordo com o documento, a fórmula para o cálculo do CRA é:\n\n$$CRA = \\frac{\\sum (CHc_i \\times N_i)}{\\sum CHm_i} \\text{ ou conforme a expressão indicada no documento}$$, onde:\n- **CHc**: carga horária cursada (componentes curriculares cursados com e sem aprovação) [1];\n- **CHm**: carga horária matriculada (componentes curriculares cursados com aprovação, sem aprovação e com trancamento parcial) [1];\n- **CHrf**: carga horária em componentes curriculares com reprovação por frequência [1].",
+      "contexto": [
+        "Art. 122, p. 32-33",
+        "Art. 121, p. 32",
+        "Art. 208, p. 50-51"
+      ],
+      "citacoes": [
+        "Art. 122, p. 32-33"
+      ],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-122#1",
+        "ufu-normas-gerais-graduacao/art-121#1",
+        "ufu-normas-gerais-graduacao/art-208#1",
+        "ufu-normas-gerais-graduacao/art-124#1",
+        "ufu-normas-gerais-graduacao/art-2#4",
+        "ufu-normas-gerais-graduacao/art-87#5",
+        "ufu-normas-gerais-graduacao/art-167#1",
+        "ufu-normas-gerais-graduacao/art-86#1",
+        "ufu-normas-gerais-graduacao/art-157#1",
+        "ufu-normas-gerais-graduacao/art-123#1"
+      ]
+    },
+    {
+      "id": "q057",
+      "tipo": "recusa",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 796,
+      "tokens_saida": 7,
+      "latencia_s": 0.8090509000030579,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 40, p. 13",
+        "Texto principal",
+        "Art. 48, p. 16"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "ufu-normas-estagio/art-40#1",
+        "prograd-estagio-interno-obrigatorio/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-48#1",
+        "ufu-normas-estagio/art-39#1",
+        "prograd-estagio-pagina/secao-1#1",
+        "ufu-normas-estagio/art-42#1",
+        "ufu-normas-estagio/art-48#1",
+        "prograd-estagio-interno-nao-obrigatorio/secao-1#1",
+        "ufu-normas-estagio/art-38#1",
+        "ufu-normas-gerais-graduacao/art-78#1"
+      ]
+    },
+    {
+      "id": "q058",
+      "tipo": "recusa",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 807,
+      "tokens_saida": 7,
+      "latencia_s": 1.3389256000009482,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Legislações",
+        "Art. 48, p. 16",
+        "Art. 30, p. 11-12"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "prograd-estagio-interno-nao-obrigatorio/secao-3#1",
+        "ufu-normas-gerais-graduacao/art-48#1",
+        "ufu-normas-gerais-graduacao/art-30#1",
+        "ufu-normas-gerais-graduacao/art-38#1",
+        "ufu-normas-gerais-graduacao/art-40#1",
+        "ufu-normas-gerais-graduacao/art-44#1",
+        "ufu-normas-estagio/art-44#1",
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-gerais-graduacao/art-78#1",
+        "ufu-normas-gerais-graduacao/art-55#1"
+      ]
+    },
+    {
+      "id": "q059",
+      "tipo": "recusa",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 754,
+      "tokens_saida": 7,
+      "latencia_s": 0.8074682999940705,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 37, p. 13",
+        "Art. 110, p. 30",
+        "Art. 103, p. 29"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "uniube-regimento-geral-2015/art-37#1",
+        "ufu-normas-gerais-graduacao/art-110#1",
+        "ufu-normas-gerais-graduacao/art-103#1",
+        "ufu-normas-gerais-graduacao/art-102#1",
+        "ufu-normas-gerais-graduacao/art-101#1",
+        "ufu-normas-gerais-graduacao/art-99#1",
+        "ufu-normas-gerais-graduacao/art-100#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "uniube-regimento-geral-2015/art-36#1",
+        "ufu-normas-gerais-graduacao/art-107#1"
+      ]
+    },
+    {
+      "id": "q060",
+      "tipo": "recusa",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 656,
+      "tokens_saida": 7,
+      "latencia_s": 0.8302916999964509,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Contato",
+        "Contato",
+        "Contato"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "prograd-estagio-interno-obrigatorio/contato#1",
+        "prograd-estagio-interno-nao-obrigatorio/contato#1",
+        "prograd-estagio-externo-pagina/contato#1",
+        "prograd-estagio-licenciatura/contato#1",
+        "prograd-estagio-pagina/contato#1",
+        "prograd-estagio-interno-obrigatorio/secao-1#1",
+        "prograd-estagio-interno-nao-obrigatorio/secao-1#1",
+        "ufu-normas-estagio/art-32#1",
+        "prograd-estagio-interno-obrigatorio/secao-2#2",
+        "prograd-estagio-externo-pagina/secao-1#1"
+      ]
+    },
+    {
+      "id": "q061",
+      "tipo": "recusa",
+      "recusou": true,
+      "motivo_recusa": "llm_recusou",
+      "citacao_ok": null,
+      "tokens_entrada": 863,
+      "tokens_saida": 7,
+      "latencia_s": 1.0982946000003722,
+      "erro": null,
+      "resposta_bruta": "NAO_ENCONTRADO",
+      "contexto": [
+        "Art. 55, p. 18",
+        "Art. 79, p. 23",
+        "Art. 53, p. 17-18"
+      ],
+      "citacoes": [],
+      "recuperados_ids": [
+        "ufu-normas-gerais-graduacao/art-55#1",
+        "ufu-normas-gerais-graduacao/art-79#1",
+        "ufu-normas-gerais-graduacao/art-53#1",
+        "ufu-normas-gerais-graduacao/art-38#1",
+        "ufu-normas-gerais-graduacao/art-41#1",
+        "ufu-normas-gerais-graduacao/art-2#13",
+        "ufu-normas-gerais-graduacao/art-65#1",
+        "prograd-estagio-interno-obrigatorio/secao-1#1",
+        "ufu-normas-gerais-graduacao/art-71#1",
+        "ufu-normas-estagio/art-38#1"
+      ]
+    }
+  ]
+}
