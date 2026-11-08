@@ -18,6 +18,8 @@ from typing import Any
 import psycopg
 from psycopg.rows import dict_row
 
+from guia.ingestao.lacunas import PREFIXO_LACUNA
+
 # ---------------------------------------------------------------------------
 # Constantes públicas
 # ---------------------------------------------------------------------------
@@ -275,7 +277,10 @@ def montar_prompt(
         "Nunca invente números de blocos e nunca use outro formato de citação.\n"
         f"3. Se as fontes fornecidas não contiverem informação suficiente para responder com certeza, "
         f"responda EXATAMENTE com o token {TOKEN_RECUSA} e nada mais.\n"
-        "4. Seja claro, direto e objetivo."
+        f"4. Se um trecho contiver uma marca iniciada por {PREFIXO_LACUNA}, o conteúdo indicado por ela não está disponível: "
+        f"não o reconstrua nem o suponha. Se a resposta depender desse conteúdo, "
+        f"responda EXATAMENTE com o token {TOKEN_RECUSA} e nada mais.\n"
+        "5. Seja claro, direto e objetivo."
     )
 
     linhas_user = ["Fontes disponíveis:\n"]
