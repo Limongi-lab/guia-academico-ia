@@ -10,7 +10,6 @@ import re
 from pathlib import Path
 
 from guia.ingestao.divisao import dividir_artigo
-from guia.ingestao.lacunas import aplicar_lacunas
 from guia.ingestao.procedimentos import dividir_passos
 from guia.ingestao.resolucoes import dividir_em_artigos
 from guia.ingestao.trechos import (
@@ -119,13 +118,11 @@ def main() -> None:
     saida_trechos.mkdir(parents=True, exist_ok=True)
 
     todos_trechos: list[dict] = []  # para sanidade final
-    lacunas = json.loads((RAIZ / "lacunas.json").read_text(encoding="utf-8"))
 
     for doc_id in DOCUMENTOS:
         fonte = FONTES[doc_id]
         arquivo = RAIZ / "data" / "processed" / fonte["instituicao"] / f"{doc_id}.txt"
         artigos = dividir_em_artigos(arquivo.read_text(encoding="utf-8"))
-        artigos = aplicar_lacunas(artigos, lacunas, doc_id)
 
         # Divide cada artigo longo em trechos menores e anota total_partes no artigo
         trechos: list[dict] = []
