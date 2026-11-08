@@ -280,19 +280,28 @@ def _aplicar_vigencia(unidades: list[_Unidade]) -> list[_Unidade]:
        descarta a primeira (versão antiga) e mantém a segunda (vigente).
     3. Unidade com "Incluído" → mantida; apenas a marcação é removida do texto.
     """
-    # Última posição de cada rótulo: permite identificar versões antigas.
-    ultima_ocorrencia: dict[str, int] = {}
-    for i, u in enumerate(unidades):
-        if u.rotulo:
-            ultima_ocorrencia[u.rotulo] = i
+    chaves: list[tuple[str, str]] = []
+    escopo = "caput"
+    for u in unidades:
+        rot = u.rotulo
+        if rot.startswith("§") or rot == "Parágrafo único":
+            escopo = rot
+            chave = ("paragrafo", rot)
+        elif rot.startswith("Art."):
+            chave = ("artigo", rot)
+        else:
+            chave = (escopo, rot)
+        chaves.append(chave)
+
+    ultima_ocorrencia: dict[tuple[str, str], int] = {}
+    for i, ch in enumerate(chaves):
+        ultima_ocorrencia[ch] = i
 
     resultado: list[_Unidade] = []
-    for i, u in enumerate(unidades):
-        # Regra 1: revogado → descarta sempre
+    for i, (u, ch) in enumerate(zip(unidades, chaves)):
         if u.tipo == 'Revogado':
             continue
-        # Regra 2: se há ocorrência posterior do mesmo rótulo, esta é versão antiga
-        if u.rotulo and ultima_ocorrencia.get(u.rotulo, i) != i:
+        if ultima_ocorrencia[ch] != i:
             continue
         resultado.append(u)
 
