@@ -146,10 +146,10 @@ def test_pergunta_de_500_caracteres_e_aceita():
 
 
 def test_erro_do_llm_vira_502_sem_vazar_a_mensagem_original():
-    cliente, _, _ = _cliente(Responder(erro=ErroLLM("falha com chave AIzaSECRETA123")))
+    cliente, _, _ = _cliente(Responder(erro=ErroLLM("falha com chave CHAVE-FALSA-123")))
     r = _post(cliente)
     assert r.status_code == 502
-    assert "AIzaSECRETA123" not in r.text
+    assert "CHAVE-FALSA-123" not in r.text
     assert r.json() == {"detail": "Falha ao consultar o modelo de linguagem."}
 
 
