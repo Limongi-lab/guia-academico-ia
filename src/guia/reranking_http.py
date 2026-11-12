@@ -31,25 +31,47 @@ def _enviar_padrao(
     except urllib.error.HTTPError as exc:
         status = exc.code
         try:
-            corpo_resp = json.loads(exc.read().decode("utf-8"))
-        except (json.JSONDecodeError, UnicodeDecodeError, OSError):
-            corpo_resp = {}
-        return status, corpo_resp
+            texto = exc.read().decode("utf-8", errors="replace")
+        except OSError:
+            return status, {}
+        try:
+            parsed = json.loads(texto)
+            if isinstance(parsed, dict):
+                return status, parsed
+            return status, {"_corpo": texto[:300]}
+        except (json.JSONDecodeError, ValueError):
+            return status, {"_corpo": texto[:300]}
 
 
 def _extrair_mensagem(resp: Any, status: int) -> str:
-    if isinstance(resp, dict):
-        err = resp.get("error")
-        if isinstance(err, dict):
-            msg = err.get("message")
-            if msg:
-                return str(msg)
-        elif isinstance(err, str):
-            return err
+    if not isinstance(resp, dict):
+        return f"Status HTTP {status}"
+
+    partes: list[str] = []
+
+    reason = resp.get("reason")
+    if isinstance(reason, str) and reason:
+        partes.append(reason)
+
+    err = resp.get("error")
+    if isinstance(err, dict):
+        msg = err.get("message")
+        if isinstance(msg, str) and msg:
+            partes.append(msg)
+    else:
         msg = resp.get("message")
-        if msg:
-            return str(msg)
-    return f"Status HTTP {status}"
+        if isinstance(msg, str) and msg:
+            partes.append(msg)
+
+    corpo_raw = resp.get("_corpo")
+    if isinstance(corpo_raw, str) and corpo_raw:
+        partes.append(corpo_raw)
+
+    if not partes:
+        return f"Status HTTP {status}"
+
+    resultado = ": ".join(partes)
+    return resultado[:300]
 
 
 def criar_reranker_http(
